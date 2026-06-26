@@ -27,10 +27,24 @@ st.set_page_config(
 # ============================================================
 def load_css(path):
     with open(path) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+        html(f"<style>{f.read()}</style>")
+
+def html(content):
+    """
+    Render raw HTML safely via st.markdown.
+
+    Streamlit's markdown parser treats any line indented with 4+ spaces as a
+    fenced code block (standard Markdown behaviour). Multi-line f-strings built
+    with Python indentation (common when nesting <div> blocks) trigger this,
+    causing later lines to render as literal text/code instead of HTML. We
+    strip leading whitespace from every line before handing it to st.markdown
+    so nested, indented HTML always renders as intended.
+    """
+    dedented = "\n".join(line.lstrip() for line in content.split("\n"))
+    st.markdown(dedented, unsafe_allow_html=True)
 
 load_css("style.css")
-st.markdown('<meta name="color-scheme" content="light only">', unsafe_allow_html=True)
+html('<meta name="color-scheme" content="light only">')
 
 # ============================================================
 # COLOR CONSTANTS — Official BRI 2025 rebrand palette
@@ -73,21 +87,21 @@ def icon_svg(key, size=24):
 # ============================================================
 def section_anchor(anchor_id):
     """Invisible anchor target so the page can be deep-linked/scrolled to a section."""
-    st.markdown(f'<div id="{anchor_id}" class="section-anchor"></div>', unsafe_allow_html=True)
+    html(f'<div id="{anchor_id}" class="section-anchor"></div>')
 
 def section_header(kicker, title, desc=None):
-    html = f"""
+    html_str = f"""
     <div class="section-kicker">{kicker}</div>
     <div class="section-title">{title}</div>
     <div class="kicker-rule"></div>
     """
     if desc:
-        html += f'<div class="section-desc">{desc}</div>'
-    st.markdown(html, unsafe_allow_html=True)
+        html_str += f'<div class="section-desc">{desc}</div>'
+    html(html_str)
 
 
 def card(icon_key, title, desc):
-    st.markdown(
+    html(
         f"""
         <div class="card">
             <div class="card-icon">{icon_svg(icon_key)}</div>
@@ -95,11 +109,10 @@ def card(icon_key, title, desc):
             <div class="card-desc">{desc}</div>
         </div>
         """,
-        unsafe_allow_html=True,
     )
 
 def card_dark(icon_key, title, desc):
-    st.markdown(
+    html(
         f"""
         <div class="card-dark">
             <div class="card-icon" style="color:{MENTARI};">{icon_svg(icon_key)}</div>
@@ -107,14 +120,13 @@ def card_dark(icon_key, title, desc):
             <div class="card-desc light">{desc}</div>
         </div>
         """,
-        unsafe_allow_html=True,
     )
 
 # ============================================================
 # SECTION: BERANDA
 # ============================================================
 def render_beranda():
-    st.markdown(
+    html(
         f"""
         <div class="hero-wrap">
             <div class="hero-kicker">BRImo Campus Ambassador 2026</div>
@@ -136,43 +148,42 @@ def render_beranda():
             </div>
         </div>
         """,
-        unsafe_allow_html=True,
     )
 
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:0.8rem;'>Sorotan Hasil Program</p>", unsafe_allow_html=True)
+    html(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:0.8rem;'>Sorotan Hasil Program</p>")
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.markdown(
+        html(
             f"""<div class="kpi-box">
                 <div class="kpi-label">Target Awal</div>
                 <div class="kpi-number">{d.KPI_TARGET}</div>
                 <div class="kpi-sub">nasabah baru</div>
-            </div>""", unsafe_allow_html=True)
+            </div>""")
     with col2:
-        st.markdown(
+        html(
             f"""<div class="kpi-box emphasis">
                 <div class="kpi-label on-dark">Realisasi Akhir</div>
                 <div class="kpi-number on-dark">{d.KPI_AKTUAL}</div>
                 <div class="kpi-sub on-dark">nasabah baru</div>
-            </div>""", unsafe_allow_html=True)
+            </div>""")
     with col3:
-        st.markdown(
+        html(
             f"""<div class="kpi-box">
                 <div class="kpi-label">Capaian</div>
                 <div class="kpi-number accent">{d.KPI_PERSEN}%</div>
                 <div class="kpi-sub">dari target</div>
-            </div>""", unsafe_allow_html=True)
+            </div>""")
     with col4:
-        st.markdown(
+        html(
             f"""<div class="kpi-box">
                 <div class="kpi-label">BC Ratio</div>
                 <div class="kpi-number accent">{d.BC_RATIO}</div>
                 <div class="kpi-sub">manfaat ekonomi</div>
-            </div>""", unsafe_allow_html=True)
+            </div>""")
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Ikhtisar Laporan</p>", unsafe_allow_html=True)
+    html("<br>")
+    html(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Ikhtisar Laporan</p>")
     toc_items = [
         ("doc", "Summary Program", "Gambaran umum dan tujuan", "anchor-summary"),
         ("target", "Objective Program", "Business objective dan target komunitas", "anchor-objective"),
@@ -186,7 +197,7 @@ def render_beranda():
     cols = st.columns(4)
     for i, (icon, title, desc, anchor) in enumerate(toc_items):
         with cols[i % 4]:
-            st.markdown(
+            html(
                 f"""
                 <a href="#{anchor}" class="toc-card">
                     <div class="card-icon">{icon_svg(icon)}</div>
@@ -194,9 +205,8 @@ def render_beranda():
                     <div class="card-desc">{desc}</div>
                 </a>
                 """,
-                unsafe_allow_html=True,
             )
-            st.markdown("<br>", unsafe_allow_html=True)
+            html("<br>")
 
 # ============================================================
 # SECTION 1: SUMMARY PROGRAM
@@ -207,7 +217,7 @@ def render_summary():
 
     col1, col2 = st.columns([1.3, 1])
     with col1:
-        st.markdown(
+        html(
             f"""
             <p style="font-size:0.96rem; line-height:1.75; color:{INK};">
             <b>{d.PROGRAM_INFO['nama_program']}</b> ({d.PROGRAM_INFO['nama_panjang']}) adalah program akuisisi nasabah
@@ -221,7 +231,6 @@ def render_summary():
             personal, cepat, dan terpercaya.
             </p>
             """,
-            unsafe_allow_html=True,
         )
 
     with col2:
@@ -235,31 +244,29 @@ def render_summary():
             f'<div class="info-row"><div class="info-label">{label}</div><div class="info-value">{val}</div></div>'
             for label, val in info_rows
         )
-        st.markdown(f'<div class="card">{rows_html}</div>', unsafe_allow_html=True)
+        html(f'<div class="card">{rows_html}</div>')
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Latar Belakang Program</p>", unsafe_allow_html=True)
+    html("<br><br>")
+    html(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Latar Belakang Program</p>")
     cols = st.columns(3)
     for col, item in zip(cols, d.LATAR_BELAKANG):
         with col:
             card(item["icon"], item["judul"], item["desc"])
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(
+    html("<br>")
+    html(
         f"""
         <div class="card-dark">
             <div style="color:{MENTARI}; font-weight:600; font-size:0.75rem; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:1rem;">
                 Tujuan Program
             </div>
         """,
-        unsafe_allow_html=True,
     )
     for t in d.TUJUAN_PROGRAM:
-        st.markdown(
+        html(
             f'<div class="check-item" style="color:white;"><span class="check-mark">{icon_svg("check", 14)}</span><span>{t}</span></div>',
-            unsafe_allow_html=True,
         )
-    st.markdown("</div>", unsafe_allow_html=True)
+    html("</div>")
 
 # ============================================================
 # SECTION 2: OBJECTIVE PROGRAM
@@ -270,15 +277,14 @@ def render_objective():
 
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown(
+        html(
             f"""<div class="card-flat" style="padding:1.6rem;">
             <div style="color:{NUSANTARA}; font-weight:600; font-size:0.78rem; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:1.2rem;">
                 Business Objective
             </div>""",
-            unsafe_allow_html=True,
         )
         for i, obj in enumerate(d.BUSINESS_OBJECTIVES):
-            st.markdown(
+            html(
                 f"""
                 <div class="numbered-item">
                     <div class="numbered-index">0{i+1}</div>
@@ -288,20 +294,18 @@ def render_objective():
                     </div>
                 </div>
                 """,
-                unsafe_allow_html=True,
             )
-        st.markdown("</div>", unsafe_allow_html=True)
+        html("</div>")
 
     with col2:
-        st.markdown(
+        html(
             f"""<div class="card-dark" style="padding:1.6rem;">
             <div style="color:{MENTARI}; font-weight:600; font-size:0.78rem; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:1.2rem;">
                 Komunitas yang Disasar
             </div>""",
-            unsafe_allow_html=True,
         )
         for komunitas in d.TARGET_KOMUNITAS:
-            st.markdown(
+            html(
                 f"""
                 <div style="display:flex; gap:0.9rem; margin-bottom:1.3rem;">
                     <div style="min-width:30px; color:{MENTARI};">{icon_svg(komunitas['icon'], 26)}</div>
@@ -311,9 +315,8 @@ def render_objective():
                     </div>
                 </div>
                 """,
-                unsafe_allow_html=True,
             )
-        st.markdown("</div>", unsafe_allow_html=True)
+        html("</div>")
 
 # ============================================================
 # SECTION 3: TARGET DAN KPI
@@ -328,28 +331,28 @@ def render_kpi():
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown(
+        html(
             f"""<div class="kpi-box">
                 <div class="kpi-label">Target Awal</div>
                 <div class="kpi-number">{d.KPI_TARGET}</div>
                 <div class="kpi-sub">nasabah baru</div>
-            </div>""", unsafe_allow_html=True)
+            </div>""")
     with col2:
-        st.markdown(
+        html(
             f"""<div class="kpi-box emphasis">
                 <div class="kpi-label on-dark">Realisasi Akhir</div>
                 <div class="kpi-number on-dark">{d.KPI_AKTUAL}</div>
                 <div class="kpi-sub on-dark">nasabah baru</div>
-            </div>""", unsafe_allow_html=True)
+            </div>""")
     with col3:
-        st.markdown(
+        html(
             f"""<div class="kpi-box">
                 <div class="kpi-label">Capaian</div>
                 <div class="kpi-number accent">{d.KPI_PERSEN}%</div>
                 <div class="kpi-sub">dari target</div>
-            </div>""", unsafe_allow_html=True)
+            </div>""")
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    html("<br>")
     c1, c2, c3 = st.columns(3)
     sec_kpi = [
         (c1, f"{d.FIRST_TRANSACTION_RATE}%", "First Transaction Rate", "dari seluruh nasabah baru bertransaksi pertama kali"),
@@ -358,7 +361,7 @@ def render_kpi():
     ]
     for col, num, title, desc in sec_kpi:
         with col:
-            st.markdown(
+            html(
                 f"""
                 <div style="border-left:2px solid {LINE}; padding-left:1rem;">
                     <div style="font-size:1.55rem; font-weight:700; color:{NUSANTARA};">{num}</div>
@@ -366,11 +369,10 @@ def render_kpi():
                     <div style="color:{SLATE}; font-size:0.78rem; line-height:1.4;">{desc}</div>
                 </div>
                 """,
-                unsafe_allow_html=True,
             )
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Kontribusi Capaian per Jalur Akuisisi</p>", unsafe_allow_html=True)
+    html("<br><br>")
+    html(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Kontribusi Capaian per Jalur Akuisisi</p>")
 
     col_chart, col_table = st.columns([1.3, 1])
     with col_chart:
@@ -410,7 +412,7 @@ def render_kpi():
             f"<td style='text-align:center;font-weight:700;color:{INK};'>{pct}</td></tr>"
             for label, target, aktual, pct in rincian
         )
-        st.markdown(
+        html(
             f"""
             <div class="card-flat" style="padding:1.5rem;">
                 <table class="kpi-table">
@@ -419,7 +421,6 @@ def render_kpi():
                 </table>
             </div>
             """,
-            unsafe_allow_html=True,
         )
 
 # ============================================================
@@ -439,17 +440,16 @@ def render_aktivitas():
             <div class="timeline-desc">{t['desc']}</div>
         </div>
         """
-    st.markdown(f'<div class="timeline-row">{cards_html}</div>', unsafe_allow_html=True)
-    st.markdown('<p class="swipe-hint">Geser untuk melihat hari selanjutnya</p>', unsafe_allow_html=True)
+    html(f'<div class="timeline-row">{cards_html}</div>')
+    html('<p class="swipe-hint">Geser untuk melihat hari selanjutnya</p>')
 
-    st.markdown(
+    html(
         f'<p class="muted-note">Catatan: skema referral di H5 menjadi titik balik akselerasi pendaftaran, '
         f'mendorong lonjakan nasabah baru di H6.</p>',
-        unsafe_allow_html=True,
     )
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Pertumbuhan Nasabah Kumulatif</p>", unsafe_allow_html=True)
+    html("<br>")
+    html(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Pertumbuhan Nasabah Kumulatif</p>")
     df_growth = pd.DataFrame(d.TIMELINE)
     fig = go.Figure(
         go.Scatter(
@@ -475,8 +475,8 @@ def render_aktivitas():
     )
     st.plotly_chart(fig, width="stretch")
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Tiga Jalur Paralel Akuisisi Nasabah</p>", unsafe_allow_html=True)
+    html("<br>")
+    html(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Tiga Jalur Paralel Akuisisi Nasabah</p>")
     cols = st.columns(3)
     for col, jalur in zip(cols, d.JALUR_AKUISISI):
         with col:
@@ -484,7 +484,7 @@ def render_aktivitas():
                 f'<div class="step-item"><span class="step-num">{i+1}</span><span>{s}</span></div>'
                 for i, s in enumerate(jalur["steps"])
             )
-            st.markdown(
+            html(
                 f"""
                 <div class="card-dark" style="padding:1.5rem;">
                     <div style="color:{MENTARI}; margin-bottom:0.7rem;">{icon_svg(jalur['icon'], 28)}</div>
@@ -496,16 +496,15 @@ def render_aktivitas():
                     </div>
                 </div>
                 """,
-                unsafe_allow_html=True,
             )
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:0.3rem;'>Dokumentasi Aktivitas Akuisisi</p>", unsafe_allow_html=True)
+    html("<br>")
+    html(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:0.3rem;'>Dokumentasi Aktivitas Akuisisi</p>")
     st.caption("Slot dokumentasi di bawah masih placeholder. Ganti dengan tangkapan layar atau foto asli sebelum presentasi final.")
     cols = st.columns(4)
     for col, doc in zip(cols, d.DOKUMENTASI):
         with col:
-            st.markdown(
+            html(
                 f"""
                 <div class="doc-card">
                     <div class="doc-img-area">{icon_svg(doc['icon'], 30)}</div>
@@ -516,7 +515,6 @@ def render_aktivitas():
                     </div>
                 </div>
                 """,
-                unsafe_allow_html=True,
             )
 
 # ============================================================
@@ -528,7 +526,7 @@ def render_dampak():
 
     col1, col2 = st.columns([1, 1.6])
     with col1:
-        st.markdown(
+        html(
             f"""
             <div class="card-dark" style="padding:1.8rem; min-height:380px;">
                 <div style="color:{MENTARI}; margin-bottom:0.8rem;">{icon_svg('balance', 32)}</div>
@@ -543,7 +541,6 @@ def render_dampak():
                 </p>
             </div>
             """,
-            unsafe_allow_html=True,
         )
 
     with col2:
@@ -553,7 +550,7 @@ def render_dampak():
             for col, item in zip(cols, row):
                 with col:
                     card(item["icon"], item["judul"], item["desc"])
-                    st.markdown("<br>", unsafe_allow_html=True)
+                    html("<br>")
 
 # ============================================================
 # SECTION 6: TESTIMONI
@@ -566,7 +563,7 @@ def render_testimoni():
     cols = st.columns(3)
     for col, t in zip(cols, d.TESTIMONI):
         with col:
-            st.markdown(
+            html(
                 f"""
                 <div class="testi-card">
                     <div class="testi-text">{t['quote']}</div>
@@ -575,7 +572,6 @@ def render_testimoni():
                     <div class="testi-role">{t['peran']}</div>
                 </div>
                 """,
-                unsafe_allow_html=True,
             )
 
 # ============================================================
@@ -593,18 +589,17 @@ def render_swot():
             with col:
                 color = swot_colors.get(title, NUSANTARA)
                 items_html = "".join(f'<div class="swot-item">{it}</div>' for it in data["items"])
-                st.markdown(
+                html(
                     f"""
                     <div class="swot-card" style="--swot-color:{color};">
                         <div class="swot-header" style="color:{color};">{title}</div>
                         {items_html}
                     </div>
                     """,
-                    unsafe_allow_html=True,
                 )
-                st.markdown("<br>", unsafe_allow_html=True)
+                html("<br>")
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    html("<br>")
     section_header("07 — Lesson Learned", "Pembelajaran untuk Tahap Selanjutnya")
     rows = [d.LESSON_LEARNED[i:i+2] for i in range(0, len(d.LESSON_LEARNED), 2)]
     for row in rows:
@@ -612,7 +607,7 @@ def render_swot():
         for col, item in zip(cols, row):
             with col:
                 card(item["icon"], item["judul"], item["desc"])
-                st.markdown("<br>", unsafe_allow_html=True)
+                html("<br>")
 
 # ============================================================
 # SECTION: KESIMPULAN
@@ -621,7 +616,7 @@ def render_kesimpulan():
     section_anchor("anchor-kesimpulan")
     col1, col2 = st.columns([1.5, 1])
     with col1:
-        st.markdown(
+        html(
             f"""
             <div class="section-kicker">Kesimpulan dan Rekomendasi</div>
             <div class="section-title">Program Terbukti Layak untuk Diskalakan</div>
@@ -632,16 +627,14 @@ def render_kesimpulan():
             adalah kanal akuisisi yang efektif dan efisien secara biaya.
             </p>
             """,
-            unsafe_allow_html=True,
         )
         for r in d.REKOMENDASI:
-            st.markdown(
+            html(
                 f'<div class="check-item"><span class="check-mark">{icon_svg("check", 14)}</span><span style="color:{INK};">{r}</span></div>',
-                unsafe_allow_html=True,
             )
 
     with col2:
-        st.markdown(
+        html(
             f"""
             <div class="contact-card">
                 <div style="font-size:0.72rem; font-weight:600; color:{SLATE}; letter-spacing:1px; text-transform:uppercase;">Contact Person</div>
@@ -652,13 +645,11 @@ def render_kesimpulan():
                 <div style="font-size:0.88rem; color:{INK};">{d.PROGRAM_INFO['email']}</div>
             </div>
             """,
-            unsafe_allow_html=True,
         )
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    st.markdown(
+    html("<br><br>")
+    html(
         f"<p style='text-align:center; color:{SLATE}; font-size:0.88rem;'>Terima kasih.</p>",
-        unsafe_allow_html=True,
     )
 
 # ============================================================
@@ -666,7 +657,7 @@ def render_kesimpulan():
 # dipisahkan garis pembatas tipis agar tetap mudah dipindai saat di-scroll.
 # ============================================================
 def section_divider():
-    st.markdown('<div class="page-divider"></div>', unsafe_allow_html=True)
+    html('<div class="page-divider"></div>')
 
 render_beranda()
 section_divider()
@@ -686,10 +677,9 @@ render_swot()
 section_divider()
 render_kesimpulan()
 
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown(
+html("<br><br>")
+html(
     f"<div style='border-top:1px solid {LINE}; padding-top:1.2rem;'>"
     f"<p style='text-align:center; color:{SLATE}; font-size:0.76rem;'>"
     f"Dibuat untuk Evaluasi Program BRImo Campus Ambassador 2026 — {d.PROGRAM_INFO['penyelenggara']}</p></div>",
-    unsafe_allow_html=True,
 )
