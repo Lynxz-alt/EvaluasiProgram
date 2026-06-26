@@ -254,19 +254,16 @@ def render_summary():
             card(item["icon"], item["judul"], item["desc"])
 
     html("<br>")
-    html(
-        f"""
-        <div class="card-dark">
-            <div style="color:{MENTARI}; font-weight:600; font-size:0.75rem; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:1rem;">
-                Tujuan Program
-            </div>
-        """,
+    tujuan_items_html = "".join(
+        f'<div class="check-item" style="color:white;"><span class="check-mark">{icon_svg("check", 14)}</span><span>{t}</span></div>'
+        for t in d.TUJUAN_PROGRAM
     )
-    for t in d.TUJUAN_PROGRAM:
-        html(
-            f'<div class="check-item" style="color:white;"><span class="check-mark">{icon_svg("check", 14)}</span><span>{t}</span></div>',
-        )
-    html("</div>")
+    html(
+        f"""<div class="card-dark">
+        <div style="color:{MENTARI}; font-weight:600; font-size:0.75rem; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:1rem;">Tujuan Program</div>
+        {tujuan_items_html}
+        </div>"""
+    )
 
 # ============================================================
 # SECTION 2: OBJECTIVE PROGRAM
@@ -277,46 +274,40 @@ def render_objective():
 
     col1, col2 = st.columns(2)
     with col1:
+        obj_items_html = "".join(
+            f"""<div class="numbered-item">
+                <div class="numbered-index">0{i+1}</div>
+                <div>
+                    <div style="font-weight:700; color:{INK}; font-size:0.92rem;">{obj['judul']}</div>
+                    <div style="color:{SLATE}; font-size:0.82rem; margin-top:0.2rem; line-height:1.5;">{obj['desc']}</div>
+                </div>
+            </div>"""
+            for i, obj in enumerate(d.BUSINESS_OBJECTIVES)
+        )
         html(
             f"""<div class="card-flat" style="padding:1.6rem;">
-            <div style="color:{NUSANTARA}; font-weight:600; font-size:0.78rem; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:1.2rem;">
-                Business Objective
-            </div>""",
+            <div style="color:{NUSANTARA}; font-weight:600; font-size:0.78rem; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:1.2rem;">Business Objective</div>
+            {obj_items_html}
+            </div>"""
         )
-        for i, obj in enumerate(d.BUSINESS_OBJECTIVES):
-            html(
-                f"""
-                <div class="numbered-item">
-                    <div class="numbered-index">0{i+1}</div>
-                    <div>
-                        <div style="font-weight:700; color:{INK}; font-size:0.92rem;">{obj['judul']}</div>
-                        <div style="color:{SLATE}; font-size:0.82rem; margin-top:0.2rem; line-height:1.5;">{obj['desc']}</div>
-                    </div>
-                </div>
-                """,
-            )
-        html("</div>")
 
     with col2:
+        komunitas_items_html = "".join(
+            f"""<div style="display:flex; gap:0.9rem; margin-bottom:1.3rem;">
+                <div style="min-width:30px; color:{MENTARI};">{icon_svg(komunitas['icon'], 26)}</div>
+                <div>
+                    <div style="font-weight:700; color:white; font-size:0.9rem;">{komunitas['judul']}</div>
+                    <div style="color:#C9D9F0; font-size:0.8rem; margin-top:0.2rem; line-height:1.5;">{komunitas['desc']}</div>
+                </div>
+            </div>"""
+            for komunitas in d.TARGET_KOMUNITAS
+        )
         html(
             f"""<div class="card-dark" style="padding:1.6rem;">
-            <div style="color:{MENTARI}; font-weight:600; font-size:0.78rem; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:1.2rem;">
-                Komunitas yang Disasar
-            </div>""",
+            <div style="color:{MENTARI}; font-weight:600; font-size:0.78rem; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:1.2rem;">Komunitas yang Disasar</div>
+            {komunitas_items_html}
+            </div>"""
         )
-        for komunitas in d.TARGET_KOMUNITAS:
-            html(
-                f"""
-                <div style="display:flex; gap:0.9rem; margin-bottom:1.3rem;">
-                    <div style="min-width:30px; color:{MENTARI};">{icon_svg(komunitas['icon'], 26)}</div>
-                    <div>
-                        <div style="font-weight:700; color:white; font-size:0.9rem;">{komunitas['judul']}</div>
-                        <div style="color:#C9D9F0; font-size:0.8rem; margin-top:0.2rem; line-height:1.5;">{komunitas['desc']}</div>
-                    </div>
-                </div>
-                """,
-            )
-        html("</div>")
 
 # ============================================================
 # SECTION 3: TARGET DAN KPI
