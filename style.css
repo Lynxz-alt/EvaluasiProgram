@@ -1,0 +1,406 @@
+/* ===================== THEME VARIABLES ===================== */
+:root {
+    --navy: #16327A;
+    --blue: #0B5FCC;
+    --sky: #EAF1FC;
+    --orange: #F58220;
+    --green: #1E9E6B;
+    --slate: #5B6B8C;
+    --dark: #10204A;
+}
+
+/* ===================== GLOBAL ===================== */
+html, body, [class*="css"] {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.main .block-container {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    max-width: 1200px;
+}
+
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header[data-testid="stHeader"] {background: rgba(255,255,255,0);}
+
+/* ===================== HERO ===================== */
+.hero-wrap {
+    background: linear-gradient(135deg, #16327A 0%, #0B5FCC 100%);
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(11, 95, 204, 0.25);
+}
+
+.hero-wrap::before {
+    content: "";
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 280px; height: 280px;
+    background: rgba(245, 130, 32, 0.18);
+    border-radius: 50%;
+}
+
+.hero-wrap::after {
+    content: "";
+    position: absolute;
+    bottom: -100px; right: 120px;
+    width: 220px; height: 220px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 50%;
+}
+
+.hero-kicker {
+    color: var(--orange);
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    position: relative; z-index: 2;
+}
+
+.hero-title {
+    color: white;
+    font-size: 2.6rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+    position: relative; z-index: 2;
+}
+
+.hero-subtitle {
+    color: #DCE8FB;
+    font-size: 1.05rem;
+    font-style: italic;
+    margin-bottom: 1.2rem;
+    position: relative; z-index: 2;
+}
+
+.hero-meta {
+    color: #EAF1FC;
+    font-size: 0.92rem;
+    position: relative; z-index: 2;
+    margin-bottom: 0.25rem;
+}
+
+.hero-meta b { color: white; }
+
+/* ===================== SECTION HEADER ===================== */
+.section-kicker {
+    color: var(--orange);
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+
+.section-title {
+    color: var(--dark);
+    font-size: 1.9rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+}
+
+.section-desc {
+    color: var(--slate);
+    font-size: 0.98rem;
+    margin-bottom: 1.3rem;
+}
+
+/* ===================== CARDS ===================== */
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 1.4rem;
+    box-shadow: 0 2px 14px rgba(16, 32, 74, 0.07);
+    height: 100%;
+    border: 1px solid #EEF1F8;
+}
+
+.card-navy {
+    background: var(--navy);
+    color: white;
+    border-radius: 14px;
+    padding: 1.6rem;
+    height: 100%;
+}
+
+.card-sky {
+    background: var(--sky);
+    border-radius: 14px;
+    padding: 1.4rem;
+    height: 100%;
+}
+
+.card-icon-circle {
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    background: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 0.7rem;
+}
+
+.card-icon-circle.orange { background: var(--orange); }
+.card-icon-circle.navy { background: var(--navy); }
+
+.card-title {
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--dark);
+    margin-bottom: 0.35rem;
+}
+
+.card-title.white { color: white; }
+
+.card-desc {
+    font-size: 0.88rem;
+    color: var(--slate);
+    line-height: 1.5;
+}
+
+.card-desc.light { color: #DCE8FB; }
+
+/* ===================== KPI METRIC ===================== */
+.kpi-box {
+    border-radius: 16px;
+    padding: 1.6rem 1.4rem;
+    text-align: left;
+    height: 100%;
+}
+
+.kpi-box.dark { background: #1E3F8F; }
+.kpi-box.white { background: white; box-shadow: 0 8px 30px rgba(0,0,0,0.18); }
+
+.kpi-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.kpi-label.muted { color: #B9C6E8; }
+.kpi-label.dark-muted { color: var(--slate); }
+
+.kpi-number {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+}
+
+.kpi-sub {
+    font-size: 0.9rem;
+}
+
+/* ===================== BADGE ===================== */
+.badge-pill {
+    display: inline-block;
+    background: var(--blue);
+    color: white;
+    padding: 0.45rem 1.1rem;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+
+/* ===================== TIMELINE ===================== */
+.timeline-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.1rem 0.9rem;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(16,32,74,0.06);
+    height: 100%;
+    border: 1px solid #EEF1F8;
+}
+
+.timeline-badge {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.88rem;
+    margin: 0 auto 0.6rem auto;
+}
+
+.timeline-badge.highlight { background: var(--orange); }
+
+.timeline-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+}
+
+.timeline-desc {
+    font-size: 0.74rem;
+    color: var(--slate);
+    line-height: 1.35;
+}
+
+/* ===================== TESTIMONI ===================== */
+.testi-card {
+    background: white;
+    border-radius: 14px;
+    padding: 1.5rem;
+    height: 100%;
+    box-shadow: 0 4px 20px rgba(16,32,74,0.08);
+    position: relative;
+}
+
+.testi-quote-mark {
+    font-size: 2.4rem;
+    color: var(--blue);
+    font-weight: 900;
+    line-height: 1;
+    font-family: Georgia, serif;
+}
+
+.testi-text {
+    font-size: 0.95rem;
+    color: var(--dark);
+    font-style: italic;
+    line-height: 1.55;
+    margin: 0.7rem 0 1.1rem 0;
+    min-height: 95px;
+}
+
+.testi-name {
+    font-weight: 700;
+    color: var(--blue);
+    font-size: 0.95rem;
+}
+
+.testi-role {
+    color: var(--slate);
+    font-size: 0.82rem;
+}
+
+/* ===================== SWOT ===================== */
+.swot-card {
+    border-radius: 14px;
+    padding: 1.4rem;
+    height: 100%;
+}
+
+.swot-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 800;
+    font-size: 1.05rem;
+    margin-bottom: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.swot-item {
+    font-size: 0.88rem;
+    color: var(--dark);
+    margin-bottom: 0.6rem;
+    padding-left: 1.1rem;
+    position: relative;
+    line-height: 1.45;
+}
+
+.swot-item::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    font-weight: 900;
+}
+
+/* ===================== DOC PLACEHOLDER ===================== */
+.doc-card {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 14px rgba(16,32,74,0.07);
+    height: 100%;
+    border: 1px solid #EEF1F8;
+}
+
+.doc-img-area {
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+}
+
+.doc-placeholder-label {
+    text-align: center;
+    font-size: 0.7rem;
+    font-style: italic;
+    color: var(--slate);
+    padding: 0.3rem 0;
+}
+
+.doc-body {
+    padding: 0.9rem 1.1rem 1.2rem 1.1rem;
+}
+
+.doc-title {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+}
+
+.doc-desc {
+    font-size: 0.8rem;
+    color: var(--slate);
+    line-height: 1.4;
+}
+
+/* ===================== FOOTER / CONTACT ===================== */
+.contact-card {
+    background: white;
+    border-radius: 14px;
+    padding: 1.6rem;
+    box-shadow: 0 4px 20px rgba(16,32,74,0.1);
+}
+
+.divider-line {
+    height: 1px;
+    background: #E2E8F5;
+    margin: 0.9rem 0;
+}
+
+/* ===================== STEP LIST ===================== */
+.step-item {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 0.55rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.step-num {
+    font-weight: 800;
+    color: var(--orange);
+    min-width: 18px;
+}
+
+/* ===================== MISC ===================== */
+.muted-note {
+    font-size: 0.82rem;
+    color: var(--slate);
+    font-style: italic;
+}
+
+.gradient-divider {
+    height: 4px;
+    width: 60px;
+    background: var(--orange);
+    border-radius: 4px;
+    margin: 0.4rem 0 1.2rem 0;
+}

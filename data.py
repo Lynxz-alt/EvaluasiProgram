@@ -1,0 +1,179 @@
+# -*- coding: utf-8 -*-
+"""
+data.py — Semua data evaluasi program MCB x BRImo.
+Edit file ini untuk mengganti angka, teks, atau testimoni tanpa menyentuh app.py
+"""
+
+# ============== INFO PROGRAM ==============
+PROGRAM_INFO = {
+    "nama_program": "MCB x BRImo",
+    "nama_panjang": "Mahasiswa Cerdas Bertransaksi x BRImo",
+    "periode": "14 - 26 Juni 2026",
+    "durasi": "7 Hari (masa akuisisi inti)",
+    "penyelenggara": "Felix Petra Sanjaya",
+    "kampus": "Universitas Kristen Petra",
+    "jabatan": "Campus Ambassador BRImo 2026",
+    "email": "c14220339@john.petra.ac.id",
+    "telp": "0812-5281-8977",
+    "cakupan": "Universitas Kristen Petra & Menwa Jatim lintas kampus",
+}
+
+# ============== KPI UTAMA ==============
+KPI_TARGET = 20
+KPI_AKTUAL = 40
+KPI_PERSEN = round(KPI_AKTUAL / KPI_TARGET * 100)
+BC_RATIO = 4.45
+FIRST_TRANSACTION_RATE = 100
+JENIS_ACTIVATION = 4
+DURASI_HARI = 7
+
+# ============== KONTRIBUSI PER JALUR ==============
+JALUR_AKUISISI = [
+    {"nama": "Biro Kemahasiswaan Petra", "hasil": 14, "icon": "🎓",
+     "deskripsi": "Approach resmi ke Biro Kemahasiswaan Petra untuk distribusi info program ke seluruh mahasiswa.",
+     "steps": [
+         "Felix approach Biro Kemahasiswaan Petra",
+         "Biro blast info program ke mahasiswa Petra",
+         "Mahasiswa tertarik & chat langsung ke Felix",
+         "Dibantu proses pendaftaran BRImo",
+     ]},
+    {"nama": "WA Menwa Jatim", "hasil": 19, "icon": "💬",
+     "deskripsi": "Broadcast & follow-up personal ke jaringan WhatsApp anggota Menwa lintas kampus Jawa Timur.",
+     "steps": [
+         "Felix broadcast & personal WA ke anggota Menwa",
+         "Target tertarik dan daftar mandiri",
+         "Felix standby membantu proses via WA",
+         "Follow up intensif ke seluruh prospek",
+     ]},
+    {"nama": "Instagram Menwa Hits", "hasil": 7, "icon": "📸",
+     "deskripsi": "Konten edukasi & promosi program melalui akun Instagram komunitas Menwa Hits.",
+     "steps": [
+         "Felix approach admin Instagram Menwa Hits",
+         "Posting program MCB x BRImo di akun resmi",
+         "Followers DM Felix untuk info lebih lanjut",
+         "Pendaftaran dibantu secara remote",
+     ]},
+]
+
+# ============== TIMELINE 7 HARI ==============
+TIMELINE = [
+    {"hari": "H1", "judul": "Persiapan & Approach", "desc": "Persiapan & approach Biro Kemahasiswaan Petra untuk mendapat dukungan resmi kampus.", "nasabah_kumulatif": 0},
+    {"hari": "H2", "judul": "Serangan Digital", "desc": "Aktivasi grup WA Menwa Jatim dan posting program di Instagram Menwa Hits.", "nasabah_kumulatif": 4},
+    {"hari": "H3", "judul": "Blast Informasi", "desc": "Blast informasi program ke seluruh mahasiswa Petra melalui Biro Kemahasiswaan.", "nasabah_kumulatif": 10},
+    {"hari": "H4", "judul": "Follow Up Personal", "desc": "Follow up personal ke anggota Menwa yang menunjukkan minat melalui WhatsApp.", "nasabah_kumulatif": 17},
+    {"hari": "H5", "judul": "Skema Referral", "desc": "Mendorong skema referral — nasabah baru mengajak teman untuk ikut mendaftar.", "nasabah_kumulatif": 24},
+    {"hari": "H6", "judul": "Follow Up Masif", "desc": "Follow up masif ke seluruh prospek yang belum menyelesaikan pendaftaran.", "nasabah_kumulatif": 34},
+    {"hari": "H7", "judul": "Rekapitulasi", "desc": "Rekapitulasi data nasabah dan penyusunan laporan evaluasi program.", "nasabah_kumulatif": 40},
+]
+
+# ============== OBJECTIVE ==============
+BUSINESS_OBJECTIVES = [
+    {"judul": "Akuisisi Nasabah Baru", "desc": "Menambah jumlah nasabah aktif BRImo baru dari segmen mahasiswa secara terukur dalam waktu singkat (7 hari)."},
+    {"judul": "Aktivasi & First Transaction", "desc": "Memastikan nasabah baru tidak hanya mendaftar, tetapi benar-benar melakukan transaksi pertama di BRImo."},
+    {"judul": "Channel Akuisisi Baru", "desc": "Membuka dan membuktikan efektivitas jaringan Menwa Jatim sebagai kanal akuisisi non-konvensional."},
+    {"judul": "Brand Awareness Kampus", "desc": "Memperkenalkan BRImo sebagai solusi transaksi utama mahasiswa lintas kampus Jawa Timur."},
+]
+
+TARGET_KOMUNITAS = [
+    {"judul": "Mahasiswa Universitas Kristen Petra", "icon": "🎓", "desc": "Basis utama dengan dukungan resmi pihak kampus, responsif terhadap program institusional."},
+    {"judul": "Anggota Menwa Jatim Lintas Kampus", "icon": "🪖", "desc": "Struktur organisasi hierarkis & kepercayaan internal tinggi — keputusan dipengaruhi senioritas."},
+    {"judul": "Mahasiswa Umum di Kampus Ber-Menwa", "icon": "👥", "desc": "Jangkauan sekunder melalui efek jejaring sosial dari anggota Menwa di kampus masing-masing."},
+]
+
+# ============== LATAR BELAKANG ==============
+LATAR_BELAKANG = [
+    {"judul": "Kondisi Digital Banking", "icon": "📈", "desc": "Penetrasi mobile banking terus meningkat, namun segmen mahasiswa di kampus belum tergarap optimal."},
+    {"judul": "Tantangan Akuisisi BRImo", "icon": "⚠️", "desc": "BRImo belum jadi pilihan utama mahasiswa karena minimnya edukasi personal dari figur tepercaya di kampus."},
+    {"judul": "Peluang Belum Dimanfaatkan", "icon": "💡", "desc": "Menwa Jatim punya ribuan anggota aktif lintas kampus dengan struktur hierarkis kuat — channel akuisisi yang belum tersentuh."},
+]
+
+TUJUAN_PROGRAM = [
+    "Membuka channel akuisisi baru melalui jaringan terpusat Menwa Jatim",
+    "Membangun brand awareness BRImo secara masif di lintas kampus Jawa Timur",
+    "Menciptakan referral chain organik yang berkelanjutan di kalangan mahasiswa",
+    "Meletakkan fondasi operasional untuk scaling ke seluruh Menwa Jatim & nasional",
+]
+
+# ============== DAMPAK PROGRAM ==============
+DAMPAK_PROGRAM = [
+    {"judul": "Akuisisi 2x Lipat Target", "icon": "🏆", "desc": "40 nasabah baru BRImo aktif tercapai, 2x dari target awal 20 nasabah dalam periode yang sama."},
+    {"judul": "Engagement Aktif Menwa", "icon": "📊", "desc": "Jaringan Menwa Jatim terbukti menjadi kanal akuisisi baru yang responsif dan dapat direplikasi."},
+    {"judul": "Dukungan Resmi Kampus", "icon": "🤝", "desc": "Biro Kemahasiswaan Petra turut mendukung distribusi informasi program ke mahasiswa."},
+    {"judul": "Referral Chain Terbentuk", "icon": "🔗", "desc": "Sejumlah nasabah baru mengajak rekan sejawat, menandai awal pertumbuhan organik."},
+]
+
+# ============== DOKUMENTASI (placeholder) ==============
+DOKUMENTASI = [
+    {"judul": "Broadcast WA Menwa Jatim", "icon": "💬", "color": "#1E9E6B",
+     "desc": "Pesan ajakan & panduan pendaftaran ke grup Menwa lintas kampus."},
+    {"judul": "Story & Feed Instagram", "icon": "📸", "color": "#C13584",
+     "desc": "Konten edukasi program di Instagram pribadi Felix dan Menwa Hits."},
+    {"judul": "Approach Biro Kemahasiswaan", "icon": "🎓", "color": "#0B5FCC",
+     "desc": "Koordinasi langsung dengan Biro Kemahasiswaan Petra untuk dukungan resmi."},
+    {"judul": "Sesi Pendampingan Pendaftaran", "icon": "🧑‍🤝‍🧑", "color": "#F58220",
+     "desc": "Felix mendampingi proses pendaftaran BRImo nasabah baru secara langsung."},
+]
+
+# ============== TESTIMONI ==============
+TESTIMONI = [
+    {"quote": "Prosesnya gampang banget, tinggal chat Felix terus dibantu sampai selesai. Sekarang transfer iuran organisasi jadi lebih praktis.",
+     "nama": "R. Andika", "peran": "Anggota Menwa Jatim"},
+    {"quote": "Awalnya cuma ikut-ikutan temen, tapi pas dicoba ternyata BRImo memang lebih lengkap buat kebutuhan harian mahasiswa.",
+     "nama": "S. Wulandari", "peran": "Mahasiswa Universitas Kristen Petra"},
+    {"quote": "Seneng ada yang bantu daftar langsung, jadi nggak perlu antre ke bank. Reward cashback-nya juga lumayan buat anak kos.",
+     "nama": "M. Firmansyah", "peran": "Anggota Menwa Jatim"},
+]
+
+# ============== SWOT ==============
+SWOT = {
+    "Strength": {
+        "color": "#0B5FCC", "icon": "💪",
+        "items": [
+            "Jaringan Menwa Jatim solid & hierarkis, mempercepat penyebaran info",
+            "Pendekatan peer-to-peer personal meningkatkan trust calon nasabah",
+            "Dukungan resmi Biro Kemahasiswaan Petra memperkuat kredibilitas",
+        ],
+    },
+    "Weakness": {
+        "color": "#F58220", "icon": "⚠️",
+        "items": [
+            "Sangat bergantung pada satu Campus Ambassador (Felix) sebagai PIC tunggal",
+            "Kapasitas follow up manual terbatas saat volume prospek meningkat tajam",
+            "Belum ada sistem tracking otomatis untuk progres pendaftaran",
+        ],
+    },
+    "Opportunity": {
+        "color": "#1E9E6B", "icon": "🚀",
+        "items": [
+            "Potensi scaling ke seluruh satuan Menwa Jatim (50 kampus) & nasional",
+            "Skema BRImo Officer berinsentif dapat mereplikasi model ini secara luas",
+            "Referral chain organik berpotensi tumbuh tanpa biaya akuisisi tambahan",
+        ],
+    },
+    "Threat": {
+        "color": "#C0392B", "icon": "🛑",
+        "items": [
+            "Ketergantungan pada relasi personal berisiko jika Campus Ambassador berganti",
+            "Kompetitor e-wallet/bank lain dapat mereplikasi strategi serupa di kampus",
+            "Minat mahasiswa terhadap reward dapat menurun jika tidak diperbarui",
+        ],
+    },
+}
+
+LESSON_LEARNED = [
+    {"judul": "Peer Trust adalah Kunci", "icon": "💡",
+     "desc": "Pendekatan personal dari figur tepercaya (senior Menwa, Campus Ambassador) jauh lebih efektif dibanding iklan digital konvensional untuk segmen mahasiswa."},
+    {"judul": "Referral Mempercepat Growth", "icon": "🚀",
+     "desc": "Skema 'First Transaction → Reward → Ajak Teman' di H5 terbukti menjadi akselerator utama lonjakan akuisisi di hari-hari berikutnya."},
+    {"judul": "Multi-Channel Saling Memperkuat", "icon": "🗺️",
+     "desc": "Kombinasi WA personal, broadcast komunitas, dan Instagram menciptakan touchpoint berlapis yang meningkatkan konversi dibanding satu kanal saja."},
+    {"judul": "Perlu Sistem, Bukan Hanya Individu", "icon": "🛡️",
+     "desc": "Keberhasilan yang bertumpu pada satu Campus Ambassador perlu didukung sistem (tracking, SOP, tim) agar dapat diskalakan secara berkelanjutan."},
+]
+
+# ============== REKOMENDASI ==============
+REKOMENDASI = [
+    "Lanjutkan ke Fase 2: tempatkan BRImo Officer berinsentif di setiap satuan Menwa",
+    "Bangun sistem tracking pendaftaran agar tidak bergantung pada follow up manual",
+    "Replikasi model peer-to-peer ini ke kampus lain dengan organisasi mahasiswa aktif",
+]
