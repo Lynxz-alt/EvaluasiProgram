@@ -1,456 +1,509 @@
-/* ===================== THEME VARIABLES ===================== */
+/* ===================== THEME VARIABLES — BRI Corporate Identity ===================== */
 :root {
-    --navy: #16327A;
-    --blue: #0B5FCC;
-    --sky: #EAF1FC;
-    --orange: #F58220;
-    --green: #1E9E6B;
-    --slate: #5B6B8C;
-    --dark: #10204A;
+    --nusantara: #0857C3;   /* Nusantara Blue — primary */
+    --cakrawala: #307FE2;   /* Cakrawala Blue — secondary */
+    --mentari: #71C5EB;     /* Mentari Blue — tertiary/accent */
+    --ink: #0B1E3D;         /* near-black navy for headings */
+    --slate: #5B6B85;       /* muted body text */
+    --line: #E3E8F0;        /* hairline borders */
+    --surface: #F7F9FC;     /* subtle section background */
+    --white: #FFFFFF;
+
+    /* Force Streamlit's theme tokens to light values regardless of the
+       visitor's OS/browser dark-mode setting, so the report always
+       renders with the intended white background + navy text. */
+    color-scheme: light only;
+}
+
+/* ===================== FORCE LIGHT MODE ===================== */
+/* Streamlit reads the system color-scheme and will otherwise switch
+   the app shell to its dark theme (black background), which breaks
+   the corporate light design below. Pin every shell layer to white. */
+html, body,
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+[data-testid="stHeader"],
+[data-testid="stBottomBlockContainer"],
+section[data-testid="stSidebar"] {
+    background-color: var(--white) !important;
+    color: var(--ink) !important;
 }
 
 /* ===================== GLOBAL ===================== */
 html, body, [class*="css"] {
-    font-family: 'Source Sans Pro', sans-serif;
-}
-
-/* ── Force light mode everywhere ── */
-.stApp {
-    background-color: #F4F7FC !important;
-    color: #10204A !important;
-}
-
-/* Main content area */
-.main, [data-testid="stAppViewContainer"] {
-    background-color: #F4F7FC !important;
-}
-
-/* Sidebar */
-[data-testid="stSidebar"] {
-    background-color: #FFFFFF !important;
-    border-right: 1px solid #E2E8F5 !important;
-}
-
-[data-testid="stSidebar"] * {
-    color: #10204A !important;
-}
-
-/* Radio buttons in sidebar */
-[data-testid="stSidebar"] .stRadio label {
-    color: #10204A !important;
-}
-
-[data-testid="stSidebar"] .stRadio [data-baseweb="radio"] > div:first-child {
-    background-color: #0B5FCC !important;
-    border-color: #0B5FCC !important;
-}
-
-/* Info box */
-[data-testid="stAlert"] {
-    background-color: #EAF1FC !important;
-    color: #10204A !important;
-    border-color: #0B5FCC !important;
-}
-
-/* Caption / small text */
-[data-testid="stCaptionContainer"], .stMarkdown small {
-    color: #5B6B8C !important;
-}
-
-/* Divider */
-hr {
-    border-color: #E2E8F5 !important;
-}
-
-/* st.markdown h5 headings */
-h5 {
-    color: #10204A !important;
+    font-family: 'Source Sans Pro', -apple-system, sans-serif;
 }
 
 .main .block-container {
-    padding-top: 2rem;
+    padding-top: 2.4rem;
     padding-bottom: 4rem;
-    max-width: 1200px;
+    max-width: 1180px;
 }
 
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
-header[data-testid="stHeader"] {background: rgba(244,247,252,1) !important; border-bottom: 1px solid #E2E8F5;}
+header[data-testid="stHeader"] {background: rgba(255,255,255,0);}
+
+/* Anchor targets used for in-page "scroll to section" links.
+   Offset upward so the section title isn't flush against the
+   browser chrome / sticky elements when jumped to. */
+.section-anchor {
+    position: relative;
+    top: -1.2rem;
+    visibility: hidden;
+}
+
+/* Overview/ToC cards on the homepage double as anchor links —
+   style them as plain cards, not blue underlined hyperlinks. */
+a.toc-card {
+    display: block;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1.5rem 1.4rem;
+    height: 100%;
+    text-decoration: none;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+a.toc-card:hover {
+    border-color: var(--cakrawala);
+    transform: translateY(-2px);
+}
+
+a.toc-card .card-title { color: var(--ink); }
+a.toc-card .card-desc { color: var(--slate); }
+
+/* Divider between the major report sections on the single long page */
+.page-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 3.2rem 0;
+}
 
 /* ===================== HERO ===================== */
 .hero-wrap {
-    background: linear-gradient(135deg, #16327A 0%, #0B5FCC 100%);
-    border-radius: 20px;
-    padding: 3rem 2.5rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 10px 40px rgba(11, 95, 204, 0.25);
-}
-
-.hero-wrap::before {
-    content: "";
-    position: absolute;
-    top: -80px; right: -80px;
-    width: 280px; height: 280px;
-    background: rgba(245, 130, 32, 0.18);
-    border-radius: 50%;
-}
-
-.hero-wrap::after {
-    content: "";
-    position: absolute;
-    bottom: -100px; right: 120px;
-    width: 220px; height: 220px;
-    background: rgba(255,255,255,0.07);
-    border-radius: 50%;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--nusantara);
+    border-radius: 4px;
+    padding: 3rem 3rem 2.6rem 2.8rem;
+    margin-bottom: 2rem;
 }
 
 .hero-kicker {
-    color: var(--orange);
-    font-weight: 700;
-    letter-spacing: 2px;
-    font-size: 0.85rem;
+    color: var(--cakrawala);
+    font-weight: 600;
+    letter-spacing: 2.2px;
+    font-size: 0.78rem;
     text-transform: uppercase;
-    margin-bottom: 0.6rem;
-    position: relative; z-index: 2;
+    margin-bottom: 0.9rem;
 }
 
 .hero-title {
-    color: white;
-    font-size: 2.6rem;
-    font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 0.5rem;
-    position: relative; z-index: 2;
+    color: var(--ink);
+    font-size: 2.35rem;
+    font-weight: 700;
+    line-height: 1.22;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.3px;
 }
 
 .hero-subtitle {
-    color: #DCE8FB;
-    font-size: 1.05rem;
-    font-style: italic;
-    margin-bottom: 1.2rem;
-    position: relative; z-index: 2;
+    color: var(--slate);
+    font-size: 1.02rem;
+    margin-bottom: 1.6rem;
+    font-weight: 400;
 }
 
-.hero-meta {
-    color: #EAF1FC;
-    font-size: 0.92rem;
-    position: relative; z-index: 2;
+.hero-meta-row {
+    display: flex;
+    gap: 2.5rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--line);
+}
+
+.hero-meta-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--slate);
     margin-bottom: 0.25rem;
 }
 
-.hero-meta b { color: white; }
+.hero-meta-value {
+    font-size: 0.92rem;
+    color: var(--ink);
+    font-weight: 600;
+}
 
 /* ===================== SECTION HEADER ===================== */
 .section-kicker {
-    color: var(--orange);
-    font-weight: 700;
+    color: var(--cakrawala);
+    font-weight: 600;
     letter-spacing: 2px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.5rem;
 }
 
 .section-title {
-    color: var(--dark);
-    font-size: 1.9rem;
-    font-weight: 800;
-    margin-bottom: 0.3rem;
+    color: var(--ink);
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.2px;
 }
 
 .section-desc {
     color: var(--slate);
-    font-size: 0.98rem;
-    margin-bottom: 1.3rem;
+    font-size: 0.95rem;
+    margin-bottom: 1.6rem;
+    max-width: 640px;
+}
+
+.section-rule {
+    height: 1px;
+    background: var(--line);
+    margin: 0 0 1.8rem 0;
 }
 
 /* ===================== CARDS ===================== */
 .card {
-    background: white;
-    border-radius: 14px;
-    padding: 1.4rem;
-    box-shadow: 0 2px 14px rgba(16, 32, 74, 0.07);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1.5rem 1.4rem;
     height: 100%;
-    border: 1px solid #EEF1F8;
 }
 
-.card-navy {
-    background: #16327A !important;
-    color: white !important;
-    border-radius: 14px;
-    padding: 1.6rem;
-    height: 100%;
-    box-shadow: 0 4px 20px rgba(22, 50, 122, 0.22);
-}
-
-.card-navy p, .card-navy div, .card-navy span {
-    color: inherit;
-}
-
-.card-navy .step-item { color: #EAF1FC !important; }
-.card-navy .step-num  { color: #F58220 !important; }
-
-.card-sky {
-    background: var(--sky);
-    border-radius: 14px;
+.card-flat {
+    background: var(--surface);
+    border-radius: 4px;
     padding: 1.4rem;
     height: 100%;
 }
 
-.card-icon-circle {
-    width: 46px; height: 46px;
-    border-radius: 50%;
-    background: var(--blue);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem;
-    margin-bottom: 0.7rem;
+.card-dark {
+    background: var(--ink);
+    color: white;
+    border-radius: 4px;
+    padding: 1.7rem;
+    height: 100%;
 }
 
-.card-icon-circle.orange { background: var(--orange); }
-.card-icon-circle.navy { background: var(--navy); }
+.card-icon {
+    width: 38px; height: 38px;
+    margin-bottom: 0.9rem;
+    color: var(--nusantara);
+}
+
+.card-icon svg { width: 100%; height: 100%; }
 
 .card-title {
     font-weight: 700;
-    font-size: 1.02rem;
-    color: var(--dark);
-    margin-bottom: 0.35rem;
+    font-size: 1.0rem;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.1px;
 }
 
 .card-title.white { color: white; }
 
 .card-desc {
-    font-size: 0.88rem;
+    font-size: 0.87rem;
     color: var(--slate);
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
-.card-desc.light { color: #DCE8FB; }
+.card-desc.light { color: #C9D9F0; }
+
+/* ===================== INFO ROW (summary sidebar list) ===================== */
+.info-row {
+    border-bottom: 1px solid var(--line);
+    padding: 0.85rem 0;
+}
+
+.info-row:first-child { padding-top: 0; }
+.info-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.info-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--cakrawala);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+
+.info-value {
+    font-size: 0.88rem;
+    color: var(--ink);
+    line-height: 1.45;
+}
 
 /* ===================== KPI METRIC ===================== */
 .kpi-box {
-    border-radius: 16px;
-    padding: 1.6rem 1.4rem;
-    text-align: left;
+    border-radius: 4px;
+    padding: 1.7rem 1.5rem;
+    height: 100%;
+    border: 1px solid var(--line);
+}
+
+.kpi-box.emphasis {
+    border: none;
+    background: var(--ink);
+}
+
+.kpi-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+    color: var(--slate);
+}
+
+.kpi-label.on-dark { color: #9FB6D6; }
+
+.kpi-number {
+    font-size: 2.9rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+    letter-spacing: -1px;
+    color: var(--ink);
+}
+
+.kpi-number.on-dark { color: white; }
+.kpi-number.accent { color: var(--nusantara); }
+
+.kpi-sub {
+    font-size: 0.85rem;
+    color: var(--slate);
+}
+
+.kpi-sub.on-dark { color: #C9D9F0; }
+
+/* ===================== TIMELINE ===================== */
+.timeline-row {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.7rem;
+    margin-bottom: 0.8rem;
+}
+
+.timeline-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1.2rem 1rem;
     height: 100%;
 }
 
-.kpi-box.dark { background: #1E3F8F !important; color: white !important; }
-.kpi-box.dark .kpi-label { color: #B9C6E8 !important; }
-.kpi-box.dark .kpi-sub   { color: #DCE8FB !important; }
-.kpi-box.white { background: white; box-shadow: 0 8px 30px rgba(0,0,0,0.18); }
+.timeline-card.is-key {
+    border-color: var(--nusantara);
+    border-width: 1.5px;
+}
 
-.kpi-label {
-    font-size: 0.78rem;
+.timeline-day {
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--cakrawala);
     margin-bottom: 0.5rem;
 }
 
-.kpi-label.muted { color: #B9C6E8; }
-.kpi-label.dark-muted { color: var(--slate); }
-
-.kpi-number {
-    font-size: 3.2rem;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 0.3rem;
-}
-
-.kpi-sub {
-    font-size: 0.9rem;
-}
-
-/* ===================== BADGE ===================== */
-.badge-pill {
-    display: inline-block;
-    background: var(--blue);
-    color: white;
-    padding: 0.45rem 1.1rem;
-    border-radius: 30px;
-    font-weight: 700;
-    font-size: 0.92rem;
-}
-
-/* ===================== TIMELINE ===================== */
-.timeline-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.1rem 0.9rem;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(16,32,74,0.06);
-    height: 100%;
-    border: 1px solid #EEF1F8;
-}
-
-.timeline-badge {
-    width: 42px; height: 42px;
-    border-radius: 50%;
-    background: var(--blue);
-    color: white;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800;
-    font-size: 0.88rem;
-    margin: 0 auto 0.6rem auto;
-}
-
-.timeline-badge.highlight { background: var(--orange); }
-
 .timeline-title {
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 0.3rem;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+    line-height: 1.3;
 }
 
 .timeline-desc {
-    font-size: 0.74rem;
+    font-size: 0.76rem;
     color: var(--slate);
-    line-height: 1.35;
+    line-height: 1.4;
 }
 
 /* ===================== TESTIMONI ===================== */
 .testi-card {
-    background: white;
-    border-radius: 14px;
-    padding: 1.5rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1.6rem;
     height: 100%;
-    box-shadow: 0 4px 20px rgba(16,32,74,0.08);
-    position: relative;
-}
-
-.testi-quote-mark {
-    font-size: 2.4rem;
-    color: var(--blue);
-    font-weight: 900;
-    line-height: 1;
-    font-family: Georgia, serif;
+    border-top: 3px solid var(--mentari);
 }
 
 .testi-text {
-    font-size: 0.95rem;
-    color: var(--dark);
-    font-style: italic;
-    line-height: 1.55;
-    margin: 0.7rem 0 1.1rem 0;
-    min-height: 95px;
+    font-size: 0.93rem;
+    color: var(--ink);
+    line-height: 1.6;
+    margin-bottom: 1.3rem;
+    min-height: 100px;
 }
 
 .testi-name {
     font-weight: 700;
-    color: var(--blue);
-    font-size: 0.95rem;
+    color: var(--ink);
+    font-size: 0.9rem;
 }
 
 .testi-role {
     color: var(--slate);
-    font-size: 0.82rem;
+    font-size: 0.8rem;
 }
 
 /* ===================== SWOT ===================== */
 .swot-card {
-    border-radius: 14px;
-    padding: 1.4rem;
+    border-radius: 4px;
+    padding: 1.5rem;
     height: 100%;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--swot-color, var(--nusantara));
 }
 
 .swot-header {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-weight: 800;
-    font-size: 1.05rem;
-    margin-bottom: 0.9rem;
-    letter-spacing: 0.5px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink);
 }
 
 .swot-item {
-    font-size: 0.88rem;
-    color: var(--dark);
-    margin-bottom: 0.6rem;
-    padding-left: 1.1rem;
+    font-size: 0.86rem;
+    color: var(--slate);
+    margin-bottom: 0.65rem;
+    padding-left: 1rem;
     position: relative;
-    line-height: 1.45;
+    line-height: 1.5;
 }
 
 .swot-item::before {
-    content: "•";
+    content: "";
     position: absolute;
     left: 0;
-    font-weight: 900;
+    top: 0.5em;
+    width: 5px;
+    height: 5px;
+    background: var(--nusantara);
 }
 
 /* ===================== DOC PLACEHOLDER ===================== */
 .doc-card {
-    background: white;
-    border-radius: 14px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 2px 14px rgba(16,32,74,0.07);
     height: 100%;
-    border: 1px solid #EEF1F8;
 }
 
 .doc-img-area {
-    height: 130px;
+    height: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.2rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+}
+
+.doc-img-area svg {
+    width: 32px; height: 32px;
+    color: var(--slate);
+    opacity: 0.55;
 }
 
 .doc-placeholder-label {
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-style: italic;
     color: var(--slate);
-    padding: 0.3rem 0;
+    padding: 0.4rem 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
 }
 
 .doc-body {
-    padding: 0.9rem 1.1rem 1.2rem 1.1rem;
+    padding: 1rem 1.1rem 1.2rem 1.1rem;
 }
 
 .doc-title {
     font-weight: 700;
-    font-size: 0.92rem;
-    color: var(--dark);
-    margin-bottom: 0.3rem;
+    font-size: 0.88rem;
+    color: var(--ink);
+    margin-bottom: 0.35rem;
 }
 
 .doc-desc {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--slate);
-    line-height: 1.4;
+    line-height: 1.45;
 }
 
-/* ===================== FOOTER / CONTACT ===================== */
+/* ===================== CONTACT ===================== */
 .contact-card {
-    background: white;
-    border-radius: 14px;
-    padding: 1.6rem;
-    box-shadow: 0 4px 20px rgba(16,32,74,0.1);
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1.7rem;
 }
 
 .divider-line {
     height: 1px;
-    background: #E2E8F5;
-    margin: 0.9rem 0;
+    background: var(--line);
+    margin: 1rem 0;
 }
 
-/* ===================== STEP LIST ===================== */
+/* ===================== STEP LIST / NUMBERED ===================== */
 .step-item {
     display: flex;
-    gap: 0.6rem;
-    margin-bottom: 0.55rem;
-    font-size: 0.85rem;
-    line-height: 1.4;
+    gap: 0.7rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.84rem;
+    line-height: 1.45;
 }
 
 .step-num {
-    font-weight: 800;
-    color: var(--orange);
+    font-weight: 700;
+    color: var(--mentari);
     min-width: 18px;
+}
+
+.numbered-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.1rem;
+}
+
+.numbered-index {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--mentari);
+    min-width: 2.2rem;
+    line-height: 1.3;
+}
+
+/* ===================== CHECKLIST ===================== */
+.check-item {
+    display: flex;
+    gap: 0.7rem;
+    margin-bottom: 0.65rem;
+    font-size: 0.9rem;
+    align-items: flex-start;
+}
+
+.check-mark {
+    color: var(--mentari);
+    font-weight: 700;
+    min-width: 14px;
 }
 
 /* ===================== MISC ===================== */
@@ -460,10 +513,207 @@ header[data-testid="stHeader"] {background: rgba(244,247,252,1) !important; bord
     font-style: italic;
 }
 
-.gradient-divider {
-    height: 4px;
-    width: 60px;
-    background: var(--orange);
-    border-radius: 4px;
-    margin: 0.4rem 0 1.2rem 0;
+.swipe-hint {
+    display: none;
+}
+
+.kicker-rule {
+    height: 2px;
+    width: 32px;
+    background: var(--mentari);
+    margin: 0.5rem 0 1.3rem 0;
+}
+
+.badge-flat {
+    display: inline-block;
+    background: var(--surface);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    padding: 0.4rem 0.9rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.82rem;
+}
+
+/* Tables */
+table.kpi-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.kpi-table th {
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--slate);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--line);
+}
+
+table.kpi-table td {
+    font-size: 0.86rem;
+    color: var(--ink);
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--line);
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background: var(--white);
+    border-right: 1px solid var(--line);
+}
+
+section[data-testid="stSidebar"] [role="radiogroup"] label {
+    font-size: 0.88rem;
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (≤ 768px)
+   Streamlit auto-stacks st.columns() vertically below this width;
+   we only need to right-size content inside each stacked block.
+   ============================================================ */
+@media (max-width: 768px) {
+
+    .main .block-container {
+        padding-top: 1.2rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-bottom: 3rem;
+    }
+
+    /* Hero */
+    .hero-wrap {
+        padding: 1.6rem 1.3rem 1.4rem 1.4rem;
+        margin-bottom: 1.3rem;
+    }
+
+    .hero-title {
+        font-size: 1.55rem;
+        line-height: 1.28;
+    }
+
+    .hero-subtitle {
+        font-size: 0.88rem;
+        margin-bottom: 1.1rem;
+    }
+
+    /* Meta row: 3-across flex becomes a stacked list on phones */
+    .hero-meta-row {
+        flex-direction: column;
+        gap: 0.9rem;
+        padding-top: 1rem;
+    }
+
+    /* Section headers */
+    .section-title {
+        font-size: 1.4rem;
+    }
+
+    .section-desc {
+        font-size: 0.88rem;
+        max-width: 100%;
+    }
+
+    /* Cards: less padding so stacked cards don't feel oversized */
+    .card, .card-flat, .card-dark {
+        padding: 1.2rem;
+    }
+
+    .card-title {
+        font-size: 0.95rem;
+    }
+
+    .card-desc {
+        font-size: 0.84rem;
+    }
+
+    /* KPI boxes: numbers were sized for a quarter-width desktop column;
+       shrink slightly so a full-width phone block doesn't look bloated */
+    .kpi-box {
+        padding: 1.3rem 1.2rem;
+    }
+
+    .kpi-number {
+        font-size: 2.3rem;
+    }
+
+    /* Timeline: horizontal swipe-scroll strip instead of 7 squeezed
+       columns or 7 stacked blocks — keeps the "timeline" feel on phones */
+    .timeline-row {
+        display: flex;
+        overflow-x: auto;
+        gap: 0.7rem;
+        margin: 0 -1rem 0.8rem -1rem;
+        padding: 0 1rem 0.4rem 1rem;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .timeline-card {
+        flex: 0 0 72%;
+        scroll-snap-align: start;
+        padding: 1rem;
+    }
+
+    .swipe-hint {
+        display: block;
+        font-size: 0.74rem;
+        color: var(--slate);
+        font-style: italic;
+        margin-top: -0.4rem;
+    }
+
+    /* Numbered objective list: tighten the index column */
+    .numbered-index {
+        font-size: 1.1rem;
+        min-width: 1.8rem;
+    }
+
+    /* Testimonial cards */
+    .testi-text {
+        min-height: 0;
+        font-size: 0.9rem;
+    }
+
+    /* KPI / rincian table: allow horizontal scroll instead of overflow/clip */
+    table.kpi-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    table.kpi-table th,
+    table.kpi-table td {
+        font-size: 0.8rem;
+        padding: 0.55rem 0.5rem;
+    }
+
+    /* Doc placeholder grid: shrink image area to match narrower card */
+    .doc-img-area {
+        height: 90px;
+    }
+
+    /* Contact card */
+    .contact-card {
+        padding: 1.3rem;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — SMALL PHONES (≤ 420px)
+   ============================================================ */
+@media (max-width: 420px) {
+    .hero-title {
+        font-size: 1.32rem;
+    }
+
+    .kpi-number {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+    }
 }
