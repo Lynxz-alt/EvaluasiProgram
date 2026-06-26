@@ -10,6 +10,14 @@ bukan emoji — sesuai arahan desain corporate/minimalis.
 PROGRAM_INFO = {
     "nama_program": "MCB x BRImo",
     "nama_panjang": "Mahasiswa Cerdas Bertransaksi x BRImo",
+    "periode": "14 - 26 Juni 2026",
+    "durasi": "7 Hari (masa akuisisi inti)",
+    "penyelenggara": "Felix Petra Sanjaya",
+    "kampus": "Universitas Kristen Petra",
+    "jabatan": "Campus Ambassador BRImo 2026",
+    "email": "c14220339@john.petra.ac.id",
+    "telp": "0812-5281-8977",
+    "cakupan": "Universitas Kristen Petra & Menwa Jatim lintas kampus",
 }
 
 # ============== KPI UTAMA ==============
