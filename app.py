@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 app.py — Website Evaluasi Program MCB x BRImo (BRImo Campus Ambassador 2026)
-Desain: corporate, minimalis, palet warna resmi BRI (Nusantara/Cakrawala/Mentari Blue).
-Jalankan dengan: streamlit run app.py
+Dibuat dengan Streamlit. Jalankan dengan: streamlit run app.py
 """
 
+import time
 import streamlit as st
 import plotly.graph_objects as go
 import pandas as pd
@@ -16,7 +16,7 @@ import data as d
 # ============================================================
 st.set_page_config(
     page_title="Evaluasi Program MCB x BRImo",
-    page_icon=None,
+    page_icon="📱",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -31,78 +31,55 @@ def load_css(path):
 load_css("style.css")
 
 # ============================================================
-# COLOR CONSTANTS — Official BRI 2025 rebrand palette
+# COLOR CONSTANTS (Python side, untuk Plotly)
 # ============================================================
-NUSANTARA = "#0857C3"   # primary
-CAKRAWALA = "#307FE2"   # secondary
-MENTARI = "#71C5EB"     # accent
-INK = "#0B1E3D"
-SLATE = "#5B6B85"
-LINE = "#E3E8F0"
-SURFACE = "#F7F9FC"
-
-# ============================================================
-# LINE-ICON LIBRARY (SVG, stroke-based, no emoji)
-# ============================================================
-ICONS = {
-    "institution": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10l9-6 9 6"/><path d="M5 10v9M19 10v9M9 10v9M15 10v9"/><path d="M3 19h18"/></svg>',
-    "message": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.4 8.4 0 0 1-1.1 4.2L21 20l-4.3-1.1a8.5 8.5 0 1 1 4.3-7.4z"/></svg>',
-    "camera": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>',
-    "users": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14c2 .3 3.7 1.8 3.7 3.6"/></svg>',
-    "network": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="6" r="2.3"/><circle cx="18" cy="6" r="2.3"/><circle cx="12" cy="18" r="2.3"/><path d="M7.8 7.5L11 16M16.2 7.5L13 16M8.3 6h7.4"/></svg>',
-    "trend": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/></svg>',
-    "alert": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17.5v.1"/></svg>',
-    "spark": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>',
-    "trophy": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/><path d="M10 16h4v3h-4z"/><path d="M8 21h8"/></svg>',
-    "handshake": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12l4-4 4 3 2-2 4 4-3 3-3-2-2 2-4-2z"/><path d="M11 11l3 3M16 8l3 3-3 3"/></svg>',
-    "shield": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 3v6c0 4.5-3.4 7.5-8 9-4.6-1.5-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
-    "doc": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h9l3 3v15H6z"/><path d="M15 3v3h3"/><path d="M9 13h6M9 16.5h6M9 9.5h3"/></svg>',
-    "target": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.8" fill="currentColor"/></svg>',
-    "balance": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v18M5 7h14"/><path d="M5 7l-2.5 5a2.5 2.5 0 0 0 5 0zM19 7l-2.5 5a2.5 2.5 0 0 0 5 0z"/><path d="M8 21h8"/></svg>',
-    "check": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l5 5L20 6"/></svg>',
-}
-
-def icon_svg(key, size=24):
-    raw = ICONS.get(key, ICONS["doc"])
-    return raw.replace("<svg ", f'<svg width="{size}" height="{size}" ')
+NAVY = "#16327A"
+BLUE = "#0B5FCC"
+ORANGE = "#F58220"
+GREEN = "#1E9E6B"
+SLATE = "#5B6B8C"
+SKY = "#EAF1FC"
 
 # ============================================================
 # SIDEBAR NAVIGATION
 # ============================================================
 SECTIONS = [
-    "Beranda",
-    "1. Summary Program",
-    "2. Objective Program",
-    "3. Target dan KPI",
-    "4. Aktivitas Program",
-    "5. Dampak Program",
-    "6. Testimoni Peserta",
-    "7. SWOT dan Lesson Learned",
-    "Kesimpulan",
+    ("🏠", "Beranda"),
+    ("📋", "1. Summary Program"),
+    ("🎯", "2. Objective Program"),
+    ("📊", "3. Target & KPI"),
+    ("🗺️", "4. Aktivitas Program"),
+    ("💥", "5. Dampak Program"),
+    ("💬", "6. Testimoni Peserta"),
+    ("🧭", "7. SWOT & Lesson Learned"),
+    ("✅", "Kesimpulan"),
 ]
 
 with st.sidebar:
     st.markdown(
         f"""
-        <div style="padding: 0.3rem 0 1.1rem 0; border-bottom: 1px solid {LINE}; margin-bottom: 1.1rem;">
-            <div style="font-weight:700; color:{INK}; font-size:1.0rem; line-height:1.35;">
+        <div style="text-align:center; padding: 0.5rem 0 1rem 0;">
+            <div style="font-size:2.2rem;">📱</div>
+            <div style="font-weight:800; color:{NAVY}; font-size:1.05rem; line-height:1.3;">
                 MCB x BRImo
             </div>
-            <div style="color:{SLATE}; font-size:0.78rem; margin-top:0.2rem;">Laporan Evaluasi Program</div>
+            <div style="color:{SLATE}; font-size:0.8rem;">Laporan Evaluasi Program</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    st.markdown("---")
     choice = st.radio(
         "Navigasi",
-        options=SECTIONS,
+        options=[s[1] for s in SECTIONS],
+        format_func=lambda x: f"{[s[0] for s in SECTIONS if s[1]==x][0]}  {x}",
         label_visibility="collapsed",
     )
-    st.markdown(f"<div style='height:1px;background:{LINE};margin:1.2rem 0;'></div>", unsafe_allow_html=True)
+    st.markdown("---")
     st.markdown(
         f"""
-        <div style="font-size:0.78rem; color:{SLATE}; line-height:1.7;">
-            <div style="font-weight:600; color:{INK};">{d.PROGRAM_INFO['penyelenggara']}</div>
+        <div style="font-size:0.78rem; color:{SLATE}; line-height:1.6;">
+            <b>{d.PROGRAM_INFO['penyelenggara']}</b><br>
             {d.PROGRAM_INFO['jabatan']}<br>
             {d.PROGRAM_INFO['kampus']}
         </div>
@@ -117,17 +94,16 @@ def section_header(kicker, title, desc=None):
     html = f"""
     <div class="section-kicker">{kicker}</div>
     <div class="section-title">{title}</div>
-    <div class="kicker-rule"></div>
     """
     if desc:
         html += f'<div class="section-desc">{desc}</div>'
     st.markdown(html, unsafe_allow_html=True)
 
-def card(icon_key, title, desc):
+def card(icon, title, desc, icon_bg="blue"):
     st.markdown(
         f"""
         <div class="card">
-            <div class="card-icon">{icon_svg(icon_key)}</div>
+            <div class="card-icon-circle {icon_bg}">{icon}</div>
             <div class="card-title">{title}</div>
             <div class="card-desc">{desc}</div>
         </div>
@@ -135,17 +111,16 @@ def card(icon_key, title, desc):
         unsafe_allow_html=True,
     )
 
-def card_dark(icon_key, title, desc):
-    st.markdown(
-        f"""
-        <div class="card-dark">
-            <div class="card-icon" style="color:{MENTARI};">{icon_svg(icon_key)}</div>
-            <div class="card-title white">{title}</div>
-            <div class="card-desc light">{desc}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+def animated_number(placeholder, target, suffix="", duration=0.6, prefix=""):
+    """Animasi hitung naik untuk angka KPI."""
+    steps = 20
+    for i in range(steps + 1):
+        val = int(target * (i / steps))
+        placeholder.markdown(
+            f'<div class="kpi-number" style="color:{BLUE};">{prefix}{val}{suffix}</div>',
+            unsafe_allow_html=True,
+        )
+        time.sleep(duration / steps)
 
 # ============================================================
 # SECTION: BERANDA
@@ -157,98 +132,92 @@ def render_beranda():
             <div class="hero-kicker">BRImo Campus Ambassador 2026</div>
             <div class="hero-title">Laporan Evaluasi Program<br>{d.PROGRAM_INFO['nama_program']}</div>
             <div class="hero-subtitle">{d.PROGRAM_INFO['nama_panjang']}</div>
-            <div class="hero-meta-row">
-                <div>
-                    <div class="hero-meta-label">Periode Program</div>
-                    <div class="hero-meta-value">{d.PROGRAM_INFO['periode']}</div>
-                </div>
-                <div>
-                    <div class="hero-meta-label">Disusun Oleh</div>
-                    <div class="hero-meta-value">{d.PROGRAM_INFO['penyelenggara']}</div>
-                </div>
-                <div>
-                    <div class="hero-meta-label">Institusi</div>
-                    <div class="hero-meta-value">{d.PROGRAM_INFO['kampus']}</div>
-                </div>
-            </div>
+            <div class="hero-meta">📅 <b>Periode:</b> {d.PROGRAM_INFO['periode']} ({d.PROGRAM_INFO['durasi']})</div>
+            <div class="hero-meta">👤 <b>Disusun oleh:</b> {d.PROGRAM_INFO['penyelenggara']} — {d.PROGRAM_INFO['kampus']}</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:0.8rem;'>Sorotan Hasil Program</p>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("##### ✨ Sorotan Hasil Program")
 
     col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.markdown(
-            f"""<div class="kpi-box">
-                <div class="kpi-label">Target Awal</div>
-                <div class="kpi-number">{d.KPI_TARGET}</div>
-                <div class="kpi-sub">nasabah baru</div>
-            </div>""", unsafe_allow_html=True)
-    with col2:
-        st.markdown(
-            f"""<div class="kpi-box emphasis">
-                <div class="kpi-label on-dark">Realisasi Akhir</div>
-                <div class="kpi-number on-dark">{d.KPI_AKTUAL}</div>
-                <div class="kpi-sub on-dark">nasabah baru</div>
-            </div>""", unsafe_allow_html=True)
-    with col3:
-        st.markdown(
-            f"""<div class="kpi-box">
-                <div class="kpi-label">Capaian</div>
-                <div class="kpi-number accent">{d.KPI_PERSEN}%</div>
-                <div class="kpi-sub">dari target</div>
-            </div>""", unsafe_allow_html=True)
-    with col4:
-        st.markdown(
-            f"""<div class="kpi-box">
-                <div class="kpi-label">BC Ratio</div>
-                <div class="kpi-number accent">{d.BC_RATIO}</div>
-                <div class="kpi-sub">manfaat ekonomi</div>
-            </div>""", unsafe_allow_html=True)
-
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.info("Gunakan menu navigasi di sidebar kiri untuk menjelajahi setiap bagian evaluasi secara detail.")
-
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Daftar Isi</p>", unsafe_allow_html=True)
-    toc_items = [
-        ("doc", "Summary Program", "Gambaran umum dan tujuan"),
-        ("target", "Objective Program", "Business objective dan target komunitas"),
-        ("trend", "Target dan KPI", "Target vs realisasi"),
-        ("network", "Aktivitas Program", "Timeline dan dokumentasi"),
-        ("trophy", "Dampak Program", "Hasil dan manfaat"),
-        ("message", "Testimoni Peserta", "Suara nasabah baru"),
-        ("balance", "SWOT Analysis", "Analisis dan lesson learned"),
-        ("check", "Kesimpulan", "Rekomendasi tindak lanjut"),
+    highlight_data = [
+        (col1, "TARGET AWAL", d.KPI_TARGET, "nasabah baru", False),
+        (col2, "REALISASI AKHIR", d.KPI_AKTUAL, "nasabah baru", True),
+        (col3, "CAPAIAN", d.KPI_PERSEN, "% dari target", "green"),
+        (col4, "BC RATIO", d.BC_RATIO, "manfaat ekonomi", "orange"),
     ]
+    for col, label, val, sub, style in highlight_data:
+        with col:
+            if style is True:
+                color = BLUE
+                box_class = "white"
+            elif style == "green":
+                color = GREEN
+                box_class = "dark"
+            elif style == "orange":
+                color = ORANGE
+                box_class = "dark"
+            else:
+                color = "#9FB3D9"
+                box_class = "dark"
+            label_class = "dark-muted" if box_class == "white" else "muted"
+            suffix = "%" if label == "CAPAIAN" else ("x" if label == "BC RATIO" else "")
+            display_val = f"{val}{suffix}" if label != "BC RATIO" else val
+            st.markdown(
+                f"""
+                <div class="kpi-box {box_class}">
+                    <div class="kpi-label {label_class}">{label}</div>
+                    <div class="kpi-number" style="color:{color};">{display_val}</div>
+                    <div class="kpi-sub" style="color:{'#1B2A4D' if box_class=='white' else '#DCE8FB'};">{sub}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.info("👈 Gunakan menu navigasi di sidebar kiri untuk menjelajahi setiap bagian evaluasi secara detail.")
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("##### 🗂️ Daftar Isi")
     cols = st.columns(4)
+    toc_items = [
+        ("📋", "Summary Program", "Gambaran umum & tujuan"),
+        ("🎯", "Objective Program", "Business objective & target komunitas"),
+        ("📊", "Target & KPI", "Target vs realisasi"),
+        ("🗺️", "Aktivitas Program", "Timeline & dokumentasi"),
+        ("💥", "Dampak Program", "Hasil & manfaat"),
+        ("💬", "Testimoni Peserta", "Suara nasabah baru"),
+        ("🧭", "SWOT Analysis", "Analisis & lesson learned"),
+        ("✅", "Kesimpulan", "Rekomendasi tindak lanjut"),
+    ]
     for i, (icon, title, desc) in enumerate(toc_items):
         with cols[i % 4]:
-            card(icon, title, desc)
+            card(icon, title, desc, icon_bg="navy" if i % 2 == 0 else "blue")
             st.markdown("<br>", unsafe_allow_html=True)
 
 # ============================================================
 # SECTION 1: SUMMARY PROGRAM
 # ============================================================
 def render_summary():
-    section_header("01 — Summary Program", "Apa itu Program MCB x BRImo")
+    section_header("01 — Summary Program", "Apa itu Program MCB x BRImo?")
 
     col1, col2 = st.columns([1.3, 1])
     with col1:
         st.markdown(
             f"""
-            <p style="font-size:0.96rem; line-height:1.75; color:{INK};">
+            <p style="font-size:0.97rem; line-height:1.7; color:{NAVY};">
             <b>{d.PROGRAM_INFO['nama_program']}</b> ({d.PROGRAM_INFO['nama_panjang']}) adalah program akuisisi nasabah
             baru BRImo yang dijalankan secara mandiri oleh Campus Ambassador melalui jaringan kampus dan organisasi
             mahasiswa. Program ini menyasar mahasiswa aktif Universitas Kristen Petra dan anggota Resimen Mahasiswa
-            (Menwa) Jawa Timur lintas kampus, dengan pendekatan peer-to-peer yang personal dan organik.
+            (Menwa) Jawa Timur lintas kampus, dengan pendekatan <i>peer-to-peer</i> yang personal dan organik.
             </p>
-            <p style="font-size:0.96rem; line-height:1.75; color:{INK};">
+            <p style="font-size:0.97rem; line-height:1.7; color:{NAVY};">
             Berbeda dari kampanye digital konvensional, program ini memanfaatkan figur tepercaya di lingkungan kampus
-            sebagai jembatan edukasi sekaligus fasilitator pendaftaran, sehingga proses akuisisi terasa lebih
-            personal, cepat, dan terpercaya.
+            (peer influencer) sebagai jembatan edukasi sekaligus fasilitator pendaftaran, sehingga proses akuisisi
+            terasa lebih personal, cepat, dan terpercaya.
             </p>
             """,
             unsafe_allow_html=True,
@@ -256,149 +225,154 @@ def render_summary():
 
     with col2:
         info_rows = [
-            ("Periode Program", f"{d.PROGRAM_INFO['periode']} ({d.PROGRAM_INFO['durasi']})"),
-            ("Penyelenggara", f"{d.PROGRAM_INFO['penyelenggara']}, {d.PROGRAM_INFO['jabatan']} - {d.PROGRAM_INFO['kampus']}"),
-            ("Cakupan Komunitas", d.PROGRAM_INFO['cakupan']),
-            ("Jalur Akuisisi", "3 jalur paralel: Biro Kemahasiswaan, WA Menwa Jatim, Instagram Menwa Hits"),
+            ("PERIODE PROGRAM", f"{d.PROGRAM_INFO['periode']} ({d.PROGRAM_INFO['durasi']})"),
+            ("PENYELENGGARA", f"{d.PROGRAM_INFO['penyelenggara']}, {d.PROGRAM_INFO['jabatan']} - {d.PROGRAM_INFO['kampus']}"),
+            ("CAKUPAN KOMUNITAS", d.PROGRAM_INFO['cakupan']),
+            ("JALUR AKUISISI", "3 jalur paralel: Biro Kemahasiswaan, WA Menwa Jatim, Instagram Menwa Hits"),
         ]
-        rows_html = "".join(
-            f'<div class="info-row"><div class="info-label">{label}</div><div class="info-value">{val}</div></div>'
-            for label, val in info_rows
-        )
-        st.markdown(f'<div class="card">{rows_html}</div>', unsafe_allow_html=True)
+        for label, val in info_rows:
+            st.markdown(
+                f"""
+                <div class="card-sky" style="margin-bottom:0.7rem; padding:1rem 1.1rem;">
+                    <div style="font-size:0.72rem; font-weight:700; color:{BLUE}; letter-spacing:1px;">{label}</div>
+                    <div style="font-size:0.85rem; color:{NAVY}; margin-top:0.25rem;">{val}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Latar Belakang Program</p>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("##### Latar Belakang Program")
     cols = st.columns(3)
     for col, item in zip(cols, d.LATAR_BELAKANG):
         with col:
             card(item["icon"], item["judul"], item["desc"])
 
     st.markdown("<br>", unsafe_allow_html=True)
+    tujuan_items = "".join(
+        f'<div style="color:white; font-size:0.92rem; margin-bottom:0.55rem;">✅&nbsp;&nbsp;{t}</div>'
+        for t in d.TUJUAN_PROGRAM
+    )
     st.markdown(
         f"""
-        <div class="card-dark">
-            <div style="color:{MENTARI}; font-weight:600; font-size:0.75rem; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:1rem;">
-                Tujuan Program
+        <div class="card-navy">
+            <div style="color:{ORANGE}; font-weight:700; font-size:0.78rem; letter-spacing:1.5px; margin-bottom:0.7rem;">
+                TUJUAN PROGRAM
             </div>
+            {tujuan_items}
+        </div>
         """,
         unsafe_allow_html=True,
     )
-    for t in d.TUJUAN_PROGRAM:
-        st.markdown(
-            f'<div class="check-item" style="color:white;"><span class="check-mark">{icon_svg("check", 14)}</span><span>{t}</span></div>',
-            unsafe_allow_html=True,
-        )
-    st.markdown("</div>", unsafe_allow_html=True)
 
 # ============================================================
 # SECTION 2: OBJECTIVE PROGRAM
 # ============================================================
 def render_objective():
-    section_header("02 — Objective Program", "Business Objective dan Target Komunitas")
+    section_header("02 — Objective Program", "Business Objective & Target Komunitas")
 
     col1, col2 = st.columns(2)
     with col1:
+        obj_items = "".join(
+            f"""<div style="display:flex; gap:0.8rem; margin-bottom:1.1rem;">
+                    <div style="font-weight:800; font-size:1.4rem; color:{ORANGE}; min-width:38px;">0{i+1}</div>
+                    <div>
+                        <div style="font-weight:700; color:{NAVY}; font-size:0.95rem;">{obj['judul']}</div>
+                        <div style="color:{SLATE}; font-size:0.83rem; margin-top:0.15rem; line-height:1.45;">{obj['desc']}</div>
+                    </div>
+                </div>"""
+            for i, obj in enumerate(d.BUSINESS_OBJECTIVES)
+        )
         st.markdown(
-            f"""<div class="card-flat" style="padding:1.6rem;">
-            <div style="color:{NUSANTARA}; font-weight:600; font-size:0.78rem; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:1.2rem;">
-                Business Objective
+            f"""<div class="card-sky" style="padding:1.5rem;">
+            <div style="color:{BLUE}; font-weight:700; font-size:0.8rem; letter-spacing:1.5px; margin-bottom:1rem;">
+                BUSINESS OBJECTIVE
+            </div>
+            {obj_items}
             </div>""",
             unsafe_allow_html=True,
         )
-        for i, obj in enumerate(d.BUSINESS_OBJECTIVES):
-            st.markdown(
-                f"""
-                <div class="numbered-item">
-                    <div class="numbered-index">0{i+1}</div>
-                    <div>
-                        <div style="font-weight:700; color:{INK}; font-size:0.92rem;">{obj['judul']}</div>
-                        <div style="color:{SLATE}; font-size:0.82rem; margin-top:0.2rem; line-height:1.5;">{obj['desc']}</div>
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-        st.markdown("</div>", unsafe_allow_html=True)
 
     with col2:
+        komunitas_items = "".join(
+            f"""<div style="display:flex; gap:0.8rem; margin-bottom:1.1rem;">
+                    <div class="card-icon-circle blue" style="margin-bottom:0; min-width:46px;">{k['icon']}</div>
+                    <div>
+                        <div style="font-weight:700; color:white; font-size:0.92rem;">{k['judul']}</div>
+                        <div style="color:#DCE8FB; font-size:0.82rem; margin-top:0.15rem; line-height:1.45;">{k['desc']}</div>
+                    </div>
+                </div>"""
+            for k in d.TARGET_KOMUNITAS
+        )
         st.markdown(
-            f"""<div class="card-dark" style="padding:1.6rem;">
-            <div style="color:{MENTARI}; font-weight:600; font-size:0.78rem; letter-spacing:1.2px; text-transform:uppercase; margin-bottom:1.2rem;">
-                Komunitas yang Disasar
+            f"""<div class="card-navy" style="padding:1.5rem;">
+            <div style="color:{ORANGE}; font-weight:700; font-size:0.8rem; letter-spacing:1.5px; margin-bottom:1rem;">
+                KOMUNITAS YANG DISASAR
+            </div>
+            {komunitas_items}
             </div>""",
             unsafe_allow_html=True,
         )
-        for komunitas in d.TARGET_KOMUNITAS:
-            st.markdown(
-                f"""
-                <div style="display:flex; gap:0.9rem; margin-bottom:1.3rem;">
-                    <div style="min-width:30px; color:{MENTARI};">{icon_svg(komunitas['icon'], 26)}</div>
-                    <div>
-                        <div style="font-weight:700; color:white; font-size:0.9rem;">{komunitas['judul']}</div>
-                        <div style="color:#C9D9F0; font-size:0.8rem; margin-top:0.2rem; line-height:1.5;">{komunitas['desc']}</div>
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-        st.markdown("</div>", unsafe_allow_html=True)
 
 # ============================================================
-# SECTION 3: TARGET DAN KPI
+# SECTION 3: TARGET & KPI
 # ============================================================
 def render_kpi():
     section_header(
-        "03 — Target dan Capaian KPI",
-        "Realisasi Melampaui Target",
+        "03 — Target & Capaian KPI",
+        "Realisasi Jauh Melampaui Target",
         "Perbandingan target awal program dengan hasil akhir yang dicapai dalam periode akuisisi.",
     )
 
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown(
-            f"""<div class="kpi-box">
-                <div class="kpi-label">Target Awal</div>
-                <div class="kpi-number">{d.KPI_TARGET}</div>
-                <div class="kpi-sub">nasabah baru</div>
-            </div>""", unsafe_allow_html=True)
+            f"""<div class="kpi-box dark">
+                <div class="kpi-label muted">TARGET AWAL</div>
+                <div class="kpi-number" style="color:#9FB3D9;">{d.KPI_TARGET}</div>
+                <div class="kpi-sub" style="color:#DCE8FB;">nasabah baru</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
     with col2:
         st.markdown(
-            f"""<div class="kpi-box emphasis">
-                <div class="kpi-label on-dark">Realisasi Akhir</div>
-                <div class="kpi-number on-dark">{d.KPI_AKTUAL}</div>
-                <div class="kpi-sub on-dark">nasabah baru</div>
-            </div>""", unsafe_allow_html=True)
+            f"""<div class="kpi-box white">
+                <div class="kpi-label dark-muted">REALISASI AKHIR</div>
+                <div class="kpi-number" style="color:{BLUE};">{d.KPI_AKTUAL}</div>
+                <div class="kpi-sub" style="color:{NAVY};">nasabah baru</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
     with col3:
         st.markdown(
-            f"""<div class="kpi-box">
-                <div class="kpi-label">Capaian</div>
-                <div class="kpi-number accent">{d.KPI_PERSEN}%</div>
-                <div class="kpi-sub">dari target</div>
-            </div>""", unsafe_allow_html=True)
+            f"""<div class="kpi-box dark">
+                <div class="kpi-label muted">CAPAIAN</div>
+                <div class="kpi-number" style="color:{GREEN};">{d.KPI_PERSEN}%</div>
+                <div class="kpi-sub" style="color:#DCE8FB;">dari target</div>
+            </div>""",
+            unsafe_allow_html=True,
+        )
 
     st.markdown("<br>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3)
     sec_kpi = [
         (c1, f"{d.FIRST_TRANSACTION_RATE}%", "First Transaction Rate", "dari seluruh nasabah baru bertransaksi pertama kali"),
-        (c2, f"{d.JENIS_ACTIVATION} Jenis", "Activation Type", "Welcome, Campus, Community, dan Referral activation"),
+        (c2, f"{d.JENIS_ACTIVATION} Jenis", "Activation Type", "Welcome, Campus, Community & Referral activation"),
         (c3, f"{d.DURASI_HARI} Hari", "Durasi Pencapaian", "target tercapai 2x lipat dalam waktu yang sama"),
     ]
     for col, num, title, desc in sec_kpi:
         with col:
             st.markdown(
                 f"""
-                <div style="border-left:2px solid {LINE}; padding-left:1rem;">
-                    <div style="font-size:1.55rem; font-weight:700; color:{NUSANTARA};">{num}</div>
-                    <div style="font-weight:700; color:{INK}; font-size:0.88rem; margin:0.2rem 0 0.3rem 0;">{title}</div>
-                    <div style="color:{SLATE}; font-size:0.78rem; line-height:1.4;">{desc}</div>
-                </div>
+                <div style="font-size:1.7rem; font-weight:800; color:{ORANGE};">{num}</div>
+                <div style="font-weight:700; color:{NAVY}; font-size:0.9rem; margin-bottom:0.2rem;">{title}</div>
+                <div style="color:{SLATE}; font-size:0.78rem;">{desc}</div>
                 """,
                 unsafe_allow_html=True,
             )
 
     st.markdown("<br><br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Kontribusi Capaian per Jalur Akuisisi</p>", unsafe_allow_html=True)
+    st.markdown("##### 📊 Kontribusi Capaian per Jalur Akuisisi")
 
     col_chart, col_table = st.columns([1.3, 1])
     with col_chart:
@@ -409,8 +383,8 @@ def render_kpi():
                 y=df["hasil"],
                 text=df["hasil"],
                 textposition="outside",
-                marker_color=NUSANTARA,
-                width=0.5,
+                marker_color=BLUE,
+                width=0.55,
             )
         )
         fig.update_layout(
@@ -418,12 +392,12 @@ def render_kpi():
             margin=dict(t=20, b=10, l=10, r=10),
             plot_bgcolor="white",
             paper_bgcolor="rgba(0,0,0,0)",
-            yaxis=dict(gridcolor=LINE, title=None),
+            yaxis=dict(gridcolor="#E5EAF5", title=None),
             xaxis=dict(title=None),
-            font=dict(family="Source Sans Pro", color=INK, size=12.5),
+            font=dict(family="Source Sans Pro", color=NAVY, size=13),
             showlegend=False,
         )
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, width='stretch')
 
     with col_table:
         rincian = [
@@ -432,17 +406,30 @@ def render_kpi():
             ("Jenis activation digabung", 4, 4, "Tercapai"),
             ("Data nasabah terlengkapi", d.KPI_TARGET, d.KPI_AKTUAL, f"{d.KPI_PERSEN}%"),
         ]
-        rows_html = "".join(
-            f"<tr><td>{label}</td><td style='text-align:center;color:{SLATE};'>{target}</td>"
-            f"<td style='text-align:center;font-weight:700;color:{NUSANTARA};'>{aktual}</td>"
-            f"<td style='text-align:center;font-weight:700;color:{INK};'>{pct}</td></tr>"
-            for label, target, aktual, pct in rincian
-        )
+        rows_html = ""
+        for label, target, aktual, pct in rincian:
+            rows_html += f"""
+            <tr>
+                <td style="padding:0.55rem 0; color:{NAVY}; font-size:0.85rem;">{label}</td>
+                <td style="padding:0.55rem 0; color:{SLATE}; text-align:center; font-size:0.9rem;">{target}</td>
+                <td style="padding:0.55rem 0; color:{BLUE}; text-align:center; font-weight:700; font-size:0.9rem;">{aktual}</td>
+                <td style="padding:0.55rem 0; color:{GREEN}; text-align:center; font-weight:700; font-size:0.85rem;">{pct}</td>
+            </tr>
+            <tr><td colspan="4" style="border-bottom:1px solid #E2E8F5;"></td></tr>
+            """
         st.markdown(
             f"""
-            <div class="card-flat" style="padding:1.5rem;">
-                <table class="kpi-table">
-                    <tr><th>Indikator</th><th style="text-align:center;">Target</th><th style="text-align:center;">Aktual</th><th style="text-align:center;">Hasil</th></tr>
+            <div class="card-sky" style="padding:1.3rem;">
+                <div style="color:{BLUE}; font-weight:700; font-size:0.78rem; letter-spacing:1px; margin-bottom:0.6rem;">
+                    RINCIAN KPI
+                </div>
+                <table style="width:100%; border-collapse:collapse;">
+                    <tr style="border-bottom:1px solid #C9D6F0;">
+                        <th style="text-align:left; font-size:0.72rem; color:{SLATE}; padding-bottom:0.4rem;">Indikator</th>
+                        <th style="font-size:0.72rem; color:{SLATE}; padding-bottom:0.4rem;">Target</th>
+                        <th style="font-size:0.72rem; color:{SLATE}; padding-bottom:0.4rem;">Aktual</th>
+                        <th style="font-size:0.72rem; color:{SLATE}; padding-bottom:0.4rem;">%</th>
+                    </tr>
                     {rows_html}
                 </table>
             </div>
@@ -459,11 +446,11 @@ def render_aktivitas():
     cols = st.columns(7)
     for col, t in zip(cols, d.TIMELINE):
         with col:
-            key_class = "is-key" if t["hari"] == "H5" else ""
+            highlight = "highlight" if t["hari"] == "H5" else ""
             st.markdown(
                 f"""
-                <div class="timeline-card {key_class}">
-                    <div class="timeline-day">{t['hari']}</div>
+                <div class="timeline-card">
+                    <div class="timeline-badge {highlight}">{t['hari']}</div>
                     <div class="timeline-title">{t['judul']}</div>
                     <div class="timeline-desc">{t['desc']}</div>
                 </div>
@@ -472,40 +459,40 @@ def render_aktivitas():
             )
 
     st.markdown(
-        f'<p class="muted-note">Catatan: skema referral di H5 menjadi titik balik akselerasi pendaftaran, '
+        f'<p class="muted-note">📌 Catatan: skema referral di H5 menjadi titik balik akselerasi pendaftaran, '
         f'mendorong lonjakan nasabah baru di H6.</p>',
         unsafe_allow_html=True,
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Pertumbuhan Nasabah Kumulatif</p>", unsafe_allow_html=True)
+    st.markdown("##### 📈 Pertumbuhan Nasabah Kumulatif")
     df_growth = pd.DataFrame(d.TIMELINE)
     fig = go.Figure(
         go.Scatter(
             x=df_growth["hari"],
             y=df_growth["nasabah_kumulatif"],
             mode="lines+markers",
-            line=dict(color=NUSANTARA, width=2.5),
-            marker=dict(size=7, color=NUSANTARA),
+            line=dict(color=BLUE, width=3),
+            marker=dict(size=9, color=ORANGE),
             fill="tozeroy",
-            fillcolor="rgba(8,87,195,0.06)",
+            fillcolor="rgba(11,95,204,0.08)",
         )
     )
     fig.add_hline(y=d.KPI_TARGET, line_dash="dash", line_color=SLATE,
                    annotation_text="Target: 20", annotation_position="top left")
     fig.update_layout(
-        height=300,
+        height=320,
         margin=dict(t=20, b=10, l=10, r=10),
         plot_bgcolor="white",
         paper_bgcolor="rgba(0,0,0,0)",
-        yaxis=dict(gridcolor=LINE, title="Jumlah Nasabah"),
+        yaxis=dict(gridcolor="#E5EAF5", title="Jumlah Nasabah"),
         xaxis=dict(title=None),
-        font=dict(family="Source Sans Pro", color=INK, size=12.5),
+        font=dict(family="Source Sans Pro", color=NAVY, size=13),
     )
-    st.plotly_chart(fig, width="stretch")
+    st.plotly_chart(fig, width='stretch')
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:1rem;'>Tiga Jalur Paralel Akuisisi Nasabah</p>", unsafe_allow_html=True)
+    st.markdown("##### 🛤️ 3 Jalur Paralel Akuisisi Nasabah")
     cols = st.columns(3)
     for col, jalur in zip(cols, d.JALUR_AKUISISI):
         with col:
@@ -515,13 +502,12 @@ def render_aktivitas():
             )
             st.markdown(
                 f"""
-                <div class="card-dark" style="padding:1.5rem;">
-                    <div style="color:{MENTARI}; margin-bottom:0.7rem;">{icon_svg(jalur['icon'], 28)}</div>
-                    <div style="font-weight:700; color:white; font-size:0.98rem; margin-bottom:1.1rem;">{jalur['nama']}</div>
-                    <div style="color:#C9D9F0;">{steps_html}</div>
-                    <div style="margin-top:1.2rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.15);">
-                        <span style="font-weight:700; color:{MENTARI}; font-size:1.3rem;">{jalur['hasil']}</span>
-                        <span style="color:#C9D9F0; font-size:0.82rem;"> nasabah</span>
+                <div class="card-navy" style="padding:1.3rem;">
+                    <div class="card-icon-circle orange" style="margin-bottom:0.6rem;">{jalur['icon']}</div>
+                    <div style="font-weight:700; color:white; font-size:1rem; margin-bottom:0.9rem;">{jalur['nama']}</div>
+                    <div style="color:#DCE8FB;">{steps_html}</div>
+                    <div style="margin-top:1rem; text-align:center; background:{BLUE}; border-radius:30px; padding:0.5rem; font-weight:700; color:white; font-size:0.9rem;">
+                        Hasil: {jalur['hasil']} nasabah
                     </div>
                 </div>
                 """,
@@ -529,16 +515,21 @@ def render_aktivitas():
             )
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"<p style='color:{SLATE}; font-size:0.8rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:0.3rem;'>Dokumentasi Aktivitas Akuisisi</p>", unsafe_allow_html=True)
-    st.caption("Slot dokumentasi di bawah masih placeholder. Ganti dengan tangkapan layar atau foto asli sebelum presentasi final.")
+    st.markdown("##### 📸 Dokumentasi Aktivitas Akuisisi")
+    st.caption("Slot dokumentasi di bawah masih placeholder — ganti dengan screenshot/foto asli kamu.")
     cols = st.columns(4)
     for col, doc in zip(cols, d.DOKUMENTASI):
         with col:
             st.markdown(
                 f"""
                 <div class="doc-card">
-                    <div class="doc-img-area">{icon_svg(doc['icon'], 30)}</div>
-                    <div class="doc-placeholder-label">Placeholder dokumentasi</div>
+                    <div class="doc-img-area" style="background:{doc['color']}1A;">
+                        <div style="width:55px; height:55px; border-radius:50%; background:{doc['color']};
+                                    display:flex; align-items:center; justify-content:center; font-size:1.6rem;">
+                            {doc['icon']}
+                        </div>
+                    </div>
+                    <div class="doc-placeholder-label">[ Placeholder dokumentasi ]</div>
                     <div class="doc-body">
                         <div class="doc-title">{doc['judul']}</div>
                         <div class="doc-desc">{doc['desc']}</div>
@@ -547,6 +538,11 @@ def render_aktivitas():
                 """,
                 unsafe_allow_html=True,
             )
+    st.markdown(
+        "<br><p class='muted-note'>💡 Tip: Ganti placeholder ini dengan upload gambar — lihat komentar "
+        "<code>DOKUMENTASI</code> di file <code>data.py</code> dan tambahkan st.image() jika sudah ada file aslinya.</p>",
+        unsafe_allow_html=True,
+    )
 
 # ============================================================
 # SECTION 5: DAMPAK PROGRAM
@@ -558,15 +554,15 @@ def render_dampak():
     with col1:
         st.markdown(
             f"""
-            <div class="card-dark" style="padding:1.8rem; min-height:380px;">
-                <div style="color:{MENTARI}; margin-bottom:0.8rem;">{icon_svg('balance', 32)}</div>
-                <div style="color:{MENTARI}; font-weight:600; font-size:0.75rem; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:0.4rem;">
-                    BC Ratio
+            <div class="card-navy" style="padding:1.6rem; min-height:380px;">
+                <div style="font-size:1.8rem;">⚖️</div>
+                <div style="color:{ORANGE}; font-weight:700; font-size:0.8rem; letter-spacing:1.5px; margin:0.8rem 0 0.3rem 0;">
+                    BC RATIO
                 </div>
-                <div style="font-size:2.8rem; font-weight:700; color:white;">{d.BC_RATIO}</div>
-                <p style="color:#C9D9F0; font-size:0.86rem; line-height:1.65; margin-top:1rem;">
-                    Setiap Rp1 biaya yang dikeluarkan menghasilkan Rp{d.BC_RATIO} manfaat ekonomi bagi BRI. Program
-                    dinilai layak dan menguntungkan untuk dijalankan, dan dengan capaian {d.KPI_AKTUAL} nasabah,
+                <div style="font-size:3rem; font-weight:800; color:white;">{d.BC_RATIO}</div>
+                <p style="color:#DCE8FB; font-size:0.88rem; line-height:1.6; margin-top:0.8rem;">
+                    Setiap Rp1 biaya yang dikeluarkan menghasilkan Rp{d.BC_RATIO} manfaat ekonomi bagi BRI — program
+                    dinilai sangat layak dan menguntungkan untuk dijalankan, dan dengan capaian {d.KPI_AKTUAL} nasabah,
                     efisiensi biaya akuisisi per kepala menjadi lebih baik dari proyeksi awal.
                 </p>
             </div>
@@ -587,8 +583,11 @@ def render_dampak():
 # SECTION 6: TESTIMONI
 # ============================================================
 def render_testimoni():
-    section_header("06 — Testimoni Peserta", "Suara Langsung dari Nasabah Baru")
-    st.caption("Testimoni di bawah merupakan ilustrasi gambaran umpan balik peserta. Disarankan dilengkapi dengan kutipan asli sebelum dipublikasikan.")
+    section_header(
+        "06 — Testimoni Peserta",
+        "Suara Langsung dari Nasabah Baru",
+    )
+    st.caption("*Testimoni di bawah merupakan ilustrasi gambaran umpan balik peserta — disarankan dilengkapi dengan kutipan asli sebelum dipublikasikan.")
 
     cols = st.columns(3)
     for col, t in zip(cols, d.TESTIMONI):
@@ -596,6 +595,7 @@ def render_testimoni():
             st.markdown(
                 f"""
                 <div class="testi-card">
+                    <div class="testi-quote-mark">&ldquo;</div>
                     <div class="testi-text">{t['quote']}</div>
                     <div class="divider-line"></div>
                     <div class="testi-name">{t['nama']}</div>
@@ -611,18 +611,18 @@ def render_testimoni():
 def render_swot():
     section_header("07 — SWOT Analysis", "Analisis SWOT Program")
 
-    swot_colors = {"Strength": NUSANTARA, "Weakness": "#B07A1E", "Opportunity": "#1E7A4D", "Threat": "#B0392B"}
     quads = list(d.SWOT.items())
     for row_start in [0, 2]:
         cols = st.columns(2)
         for col, (title, data) in zip(cols, quads[row_start:row_start+2]):
             with col:
-                color = swot_colors.get(title, NUSANTARA)
-                items_html = "".join(f'<div class="swot-item">{it}</div>' for it in data["items"])
+                items_html = "".join(f'<div class="swot-item" style="color:{NAVY};">{it}</div>' for it in data["items"])
                 st.markdown(
                     f"""
-                    <div class="swot-card" style="--swot-color:{color};">
-                        <div class="swot-header" style="color:{color};">{title}</div>
+                    <div class="swot-card" style="background:{data['color']}14;">
+                        <div class="swot-header" style="color:{data['color']};">
+                            <span>{data['icon']}</span><span>{title.upper()}</span>
+                        </div>
                         {items_html}
                     </div>
                     """,
@@ -637,7 +637,7 @@ def render_swot():
         cols = st.columns(2)
         for col, item in zip(cols, row):
             with col:
-                card(item["icon"], item["judul"], item["desc"])
+                card(item["icon"], item["judul"], item["desc"], icon_bg="navy")
                 st.markdown("<br>", unsafe_allow_html=True)
 
 # ============================================================
@@ -648,10 +648,9 @@ def render_kesimpulan():
     with col1:
         st.markdown(
             f"""
-            <div class="section-kicker">Kesimpulan dan Rekomendasi</div>
+            <div class="section-kicker">Kesimpulan & Rekomendasi</div>
             <div class="section-title">Program Terbukti Layak untuk Diskalakan</div>
-            <div class="kicker-rule"></div>
-            <p style="color:{SLATE}; font-size:0.95rem; line-height:1.75; margin-top:0.6rem; margin-bottom:1.3rem;">
+            <p style="color:{SLATE}; font-size:0.97rem; line-height:1.7; margin-top:0.6rem;">
             Dengan capaian {d.KPI_AKTUAL} nasabah baru ({d.KPI_PERSEN}% dari target) dan BC Ratio {d.BC_RATIO},
             program {d.PROGRAM_INFO['nama_program']} membuktikan bahwa jaringan komunitas kampus berbasis kepercayaan
             adalah kanal akuisisi yang efektif dan efisien secara biaya.
@@ -661,7 +660,7 @@ def render_kesimpulan():
         )
         for r in d.REKOMENDASI:
             st.markdown(
-                f'<div class="check-item"><span class="check-mark">{icon_svg("check", 14)}</span><span style="color:{INK};">{r}</span></div>',
+                f'<div style="margin-bottom:0.6rem; font-size:0.92rem; color:{NAVY};">✅&nbsp;&nbsp;{r}</div>',
                 unsafe_allow_html=True,
             )
 
@@ -669,20 +668,20 @@ def render_kesimpulan():
         st.markdown(
             f"""
             <div class="contact-card">
-                <div style="font-size:0.72rem; font-weight:600; color:{SLATE}; letter-spacing:1px; text-transform:uppercase;">Contact Person</div>
-                <div style="font-size:1.1rem; font-weight:700; color:{INK}; margin-top:0.5rem;">{d.PROGRAM_INFO['penyelenggara']}</div>
-                <div style="color:{SLATE}; font-size:0.83rem; margin-top:0.2rem; line-height:1.5;">{d.PROGRAM_INFO['jabatan']}<br>{d.PROGRAM_INFO['kampus']}</div>
+                <div style="font-size:0.75rem; font-weight:700; color:{SLATE}; letter-spacing:1px;">CONTACT PERSON</div>
+                <div style="font-size:1.15rem; font-weight:800; color:{NAVY}; margin-top:0.4rem;">{d.PROGRAM_INFO['penyelenggara']}</div>
+                <div style="color:{SLATE}; font-size:0.85rem; margin-top:0.2rem;">{d.PROGRAM_INFO['jabatan']}<br>{d.PROGRAM_INFO['kampus']}</div>
                 <div class="divider-line"></div>
-                <div style="font-size:0.88rem; color:{INK}; margin-bottom:0.5rem;">{d.PROGRAM_INFO['telp']}</div>
-                <div style="font-size:0.88rem; color:{INK};">{d.PROGRAM_INFO['email']}</div>
+                <div style="font-size:0.9rem; color:{NAVY};">📞 {d.PROGRAM_INFO['telp']}</div>
+                <div style="font-size:0.9rem; color:{NAVY}; margin-top:0.4rem;">✉️ {d.PROGRAM_INFO['email']}</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(
-        f"<p style='text-align:center; color:{SLATE}; font-size:0.88rem;'>Terima kasih.</p>",
+        f"<p style='text-align:center; color:{ORANGE}; font-style:italic; font-size:1.1rem;'>Terima kasih. 🙏</p>",
         unsafe_allow_html=True,
     )
 
@@ -693,11 +692,11 @@ ROUTES = {
     "Beranda": render_beranda,
     "1. Summary Program": render_summary,
     "2. Objective Program": render_objective,
-    "3. Target dan KPI": render_kpi,
+    "3. Target & KPI": render_kpi,
     "4. Aktivitas Program": render_aktivitas,
     "5. Dampak Program": render_dampak,
     "6. Testimoni Peserta": render_testimoni,
-    "7. SWOT dan Lesson Learned": render_swot,
+    "7. SWOT & Lesson Learned": render_swot,
     "Kesimpulan": render_kesimpulan,
 }
 
@@ -705,8 +704,7 @@ ROUTES[choice]()
 
 st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown(
-    f"<div style='border-top:1px solid {LINE}; padding-top:1.2rem;'>"
-    f"<p style='text-align:center; color:{SLATE}; font-size:0.76rem;'>"
-    f"Dibuat untuk Evaluasi Program BRImo Campus Ambassador 2026 — {d.PROGRAM_INFO['penyelenggara']}</p></div>",
+    f"<p style='text-align:center; color:{SLATE}; font-size:0.78rem;'>"
+    f"Dibuat untuk Evaluasi Program BRImo Campus Ambassador 2026 — {d.PROGRAM_INFO['penyelenggara']}</p>",
     unsafe_allow_html=True,
 )

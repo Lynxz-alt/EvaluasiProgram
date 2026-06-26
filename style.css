@@ -176,12 +176,20 @@ header[data-testid="stHeader"] {background: rgba(244,247,252,1) !important; bord
 }
 
 .card-navy {
-    background: var(--navy);
-    color: white;
+    background: #16327A !important;
+    color: white !important;
     border-radius: 14px;
     padding: 1.6rem;
     height: 100%;
+    box-shadow: 0 4px 20px rgba(22, 50, 122, 0.22);
 }
+
+.card-navy p, .card-navy div, .card-navy span {
+    color: inherit;
+}
+
+.card-navy .step-item { color: #EAF1FC !important; }
+.card-navy .step-num  { color: #F58220 !important; }
 
 .card-sky {
     background: var(--sky);
@@ -227,7 +235,9 @@ header[data-testid="stHeader"] {background: rgba(244,247,252,1) !important; bord
     height: 100%;
 }
 
-.kpi-box.dark { background: #1E3F8F; }
+.kpi-box.dark { background: #1E3F8F !important; color: white !important; }
+.kpi-box.dark .kpi-label { color: #B9C6E8 !important; }
+.kpi-box.dark .kpi-sub   { color: #DCE8FB !important; }
 .kpi-box.white { background: white; box-shadow: 0 8px 30px rgba(0,0,0,0.18); }
 
 .kpi-label {
